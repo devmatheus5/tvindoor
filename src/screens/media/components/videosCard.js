@@ -1,11 +1,14 @@
 import { ResizeMode, Video } from "expo-av";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Image, View } from "react-native";
 import { videoUrls } from "../../../services/values";
 import { playNextVideo } from "../../../utils/functions";
 import styles from "../styles";
+import { TouchableOpacity } from "react-native";
+import { AuthContext } from "../../../hooks/auth";
 const VideoCard = () => {
   const video = useRef(null);
+  const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   return (
     <View style={styles.videoContent}>
@@ -40,12 +43,20 @@ const VideoCard = () => {
           }
         }}
       />
-      <View style={styles.logo}>
+      <TouchableOpacity
+        onPress={() =>
+          value?.setUser({
+            ...value?.user,
+            hnews: !value?.user?.hnews,
+          })
+        }
+        style={styles.logo}
+      >
         <Image
           style={styles.logoImg}
           source={require("../../../../assets/logo.png")}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

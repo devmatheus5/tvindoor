@@ -49,9 +49,9 @@ function MediaScreen() {
       <View style={styles.container}>
         <View style={styles.inner}>
           <View style={styles.video}>
-            {!value.user.hnews && <NewsCard />}
+            {!value.user?.hnews && <NewsCard />}
 
-            <VideosCard />
+            {value?.user?.hnews && <VideosCard />}
             <VtCard />
           </View>
 
@@ -65,7 +65,7 @@ function MediaScreen() {
             style={styles.input}
             placeholder="Digite o número da senha"
             keyboardType="numeric"
-            showSoftInputOnFocus={false}
+            showSoftInputOnFocus={true}
             value={formInput}
             onChangeText={setFormInput}
             onSubmitEditing={() => handleNewBalcao()}

@@ -15,6 +15,7 @@ import { useContext, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { Intervalos } from "../../services/values";
 import { AuthContext } from "../../hooks/auth";
+import { TVEventHandler, useTVEventHandler } from "react-native";
 function LoginScreen({ navigation }) {
   const passwordRef = useRef();
   const { value } = useContext(AuthContext);

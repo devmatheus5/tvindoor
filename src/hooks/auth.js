@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -16,11 +17,13 @@ const AuthProvider = ({ children }) => {
       cidade: "petrolina",
     };
     try {
+      Alert.alert("Login", "Realizando login...");
       await AsyncStorage.setItem("@user", JSON.stringify(data));
       setLoggedIn(true);
+      Alert.alert("Sucesso", "Login realizado com sucesso!");
       return true;
     } catch (error) {
-      console.log(error);
+      Alert.alert("Erro", "Erro ao realizar login");
       return false;
     }
   };
@@ -42,8 +45,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     checkLogin();
   }, []);
-
-  const value = { loggedIn, Login, logout, user };
+  const value = { loggedIn, Login, logout, user, setUser };
 
   return (
     <AuthContext.Provider value={{ value }}>{children}</AuthContext.Provider>

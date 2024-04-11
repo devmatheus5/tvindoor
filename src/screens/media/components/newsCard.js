@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import useInfo from "../../../hooks/useInfo";
 import styles from "../styles";
+import { AuthContext } from "../../../hooks/auth";
+import { TouchableOpacity } from "react-native";
 const NewsCard = () => {
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+  const { value } = useContext(AuthContext);
   const { news } = useInfo();
   const handleNews = useCallback(() => {
     setCurrentNewsIndex(
@@ -48,12 +51,20 @@ const NewsCard = () => {
             </View>
           </View>
 
-          <View style={styles.logo}>
+          <TouchableOpacity
+            onPress={() =>
+              value?.setUser({
+                ...value?.user,
+                hnews: !value?.user?.hnews,
+              })
+            }
+            style={styles.logo}
+          >
             <Image
               style={styles.logoImg}
               source={require("../../../../assets/logo.png")}
             />
-          </View>
+          </TouchableOpacity>
         </>
       ) : (
         <Image
