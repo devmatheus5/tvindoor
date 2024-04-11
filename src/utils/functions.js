@@ -88,3 +88,13 @@ export const getImage = (condition_slug) => {
       return require(`../../assets/none_day.png`);
   }
 };
+
+export function sortSenhas(senhas) {
+  senhas.sort((senhaA, senhaB) => {
+    const dateA = new Date(senhaA.data);
+    const dateB = new Date(senhaB.data);
+    return dateB - dateA;
+  });
+
+  return senhas;
+}

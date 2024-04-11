@@ -1,28 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "./auth";
 
 const useInfo = () => {
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [dollar, setDollar] = useState("0.00");
-  const [city, setCity] = useState("");
+  const { value } = useContext(AuthContext);
+  const [dollar, setDollar] = useState(0);
   const [weather, setWeather] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [news, setNews] = useState([]);
-  const [isDataFetched, setIsDataFetched] = useState(false); // Novo estado para controle
 
   const getDollar = async () => {
+    if (dollar !== 0) {
+      return;
+    }
     try {
-      if (!isDataFetched) {
-        // Verifica se os dados já foram buscados antes
-        const response = await fetch(
-          "https://economia.awesomeapi.com.br/all/USD-BRL"
-        );
-        const data = await response.json();
-        if (data.USD.bid) {
-          const parsedDollar = parseFloat(data.USD.bid).toFixed(2);
-          setDollar(parsedDollar);
-          setIsDataFetched(true); // Define como true após buscar os dados
-        }
+      const response = await fetch(
+        "https://economia.awesomeapi.com.br/all/USD-BRL"
+      );
+      const data = await response.json();
+      if (data.USD.bid) {
+        const parsedDollar = parseFloat(data.USD.bid).toFixed(2);
+        setDollar(parsedDollar);
       }
     } catch (error) {
       setError(error);
@@ -30,46 +26,43 @@ const useInfo = () => {
   };
 
   const getCity = async () => {
+    if (weather !== "") {
+      return;
+    }
+    const city = value?.user?.cidade;
     try {
-      if (!isDataFetched) {
-        // Verifica se os dados já foram buscados antes
-
-        const response = await fetch(
-          `https://api.hgbrasil.com/weather?key=2707deed&city_name=petrolina`
-        );
-        if (!response.ok) {
-          console.error("Erro ao buscar a localização pelo IP");
-        }
-        const data = await response.json();
-        const results = data.results;
-        console.log(results);
-        setCity(data?.city);
-        setWeather(results);
-        setIsDataFetched(true); // Define como true após buscar os dados
+      const response = await fetch(
+        `https://api.hgbrasil.com/weather?key=2707deed&city_name=${city}`
+      );
+      if (!response.ok) {
+        console.error("Erro ao buscar a localização pelo IP");
       }
+      const data = await response.json();
+      const results = data.results;
+      setWeather(results);
     } catch (error) {
       setError(error);
     } finally {
-      setLoading(false);
     }
   };
 
   const getNews = async () => {
+    if (news.length > 0) {
+      return;
+    }
+    if (value?.user?.hnews == "false") {
+      return;
+    }
     try {
-      if (!isDataFetched) {
-        // Verifica se os dados já foram buscados antes
-        const response = await fetch(
-          `https://newsdata.io/api/1/news?apikey=pub_41711ffcddf1bb82e5ad0f2ac19aac1a5bf5b&country=br&language=pt&size=3`
-        );
-        if (!response.ok) {
-          console.error("Erro ao buscar as notícias");
-        }
-
-        const data = await response.json();
-        setNews(data.results);
-        console.log(data.results);
-        setIsDataFetched(true); // Define como true após buscar os dados
+      const response = await fetch(
+        `https://newsdata.io/api/1/news?apikey=pub_41711ffcddf1bb82e5ad0f2ac19aac1a5bf5b&country=br&language=pt&size=3`
+      );
+      if (!response.ok) {
+        console.error("Erro ao buscar as notícias");
       }
+
+      const data = await response.json();
+      setNews(data.results);
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +74,7 @@ const useInfo = () => {
     getNews();
   }, []);
 
-  return { dollar, weather, loading, error, news };
+  return { dollar, weather, news };
 };
 
 export default useInfo;

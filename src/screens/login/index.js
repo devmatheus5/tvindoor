@@ -7,18 +7,17 @@ import {
   useWindowDimensions,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 import styles from "./styles";
 import { Feather } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { Intervalos } from "../../services/values";
-
 import { AuthContext } from "../../hooks/auth";
-
 function LoginScreen({ navigation }) {
-  const { Login } = useContext(AuthContext);
-
+  const passwordRef = useRef();
+  const { value } = useContext(AuthContext);
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [user, setUser] = useState("");
@@ -51,7 +50,7 @@ function LoginScreen({ navigation }) {
     }
 
     try {
-      const result = await Login(user, password, intervalGap);
+      const result = await value.Login(user, password, intervalGap);
       if (result) {
         navigation.navigate("Media");
         setLoading(false);
@@ -64,24 +63,17 @@ function LoginScreen({ navigation }) {
       setLoading(false);
     }
   };
-  const orientation =
-    useWindowDimensions().height > useWindowDimensions().width
-      ? "Portrait"
-      : "Landscape";
 
+  const handleNext = (ref) => {
+    ref.current.focus();
+  };
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
       <View style={styles.inner}>
         <View style={styles.header}>
           <Text style={styles.title}>Configurar estação </Text>
         </View>
-        <View
-          style={
-            orientation == "Landscape"
-              ? styles.inputAreaLandscape
-              : styles.inputAreaPortrait
-          }
-        >
+        <View style={styles.inputAreaLandscape}>
           <View style={styles.box}>
             {error.user ? (
               <Text style={styles.errorMensage}>{error.user}</Text>
@@ -95,6 +87,7 @@ function LoginScreen({ navigation }) {
               onChangeText={setUser}
               style={styles.input}
               placeholder="Usuário"
+              onSubmitEditing={() => handleNext(passwordRef)}
             />
           </View>
           <View style={styles.box}>
@@ -113,6 +106,8 @@ function LoginScreen({ navigation }) {
                 onChangeText={setPassword}
                 style={styles.inputSenha}
                 placeholder="Senha"
+                ref={passwordRef}
+                onSubmitEditing={() => Keyboard.dismiss()}
               />
               <TouchableOpacity
                 onPress={() => setShow(!show)}
@@ -129,6 +124,7 @@ function LoginScreen({ navigation }) {
           <View style={styles.box}>
             <Text style={styles.label}>Intervalo de atualização</Text>
             <Picker
+              mode="dropdown"
               dropdownIconColor={"#fff"}
               style={styles.input}
               selectedValue={intervalGap}

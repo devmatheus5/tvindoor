@@ -11,12 +11,12 @@ import { AuthContext } from "./hooks/auth";
 const Stack = createNativeStackNavigator();
 
 function Routes() {
-  const { loggedIn } = React.useContext(AuthContext);
+  const { value } = React.useContext(AuthContext);
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        {loggedIn ? (
+        {value.loggedIn ? (
           <Stack.Screen
             options={{
               headerShown: false,
