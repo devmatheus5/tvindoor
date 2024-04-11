@@ -50,6 +50,4 @@ const VideoCard = () => {
   );
 };
 
-export default React.memo(VideoCard, (prevProps, nextProps) => {
-  return prevProps.videoUrls === nextProps.videoUrls;
-});
+export default VideoCard;

@@ -15,12 +15,11 @@ export default StyleSheet.create({
     flex: 1,
   },
   video: {
-    width: "80%",
-    padding: 10,
+    width: "85%",
+    marginTop: 10,
   },
   videoContent: {
     height: "82.5%",
-    position: "relative",
   },
   videoInfo: {
     backgroundColor: "#000",
@@ -37,8 +36,6 @@ export default StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    opacity: 1,
-    overlayColor: "#000",
     borderRadius: 10,
   },
   newsBanner: {
@@ -142,26 +139,27 @@ export default StyleSheet.create({
   },
   senhaArea: {
     backgroundColor: "#000",
-    width: "20%",
-    padding: 10,
+    width: "15%",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
+    padding: 10,
   },
   senhaText: {
     color: "#FFF",
     fontSize: 50,
     fontWeight: "bold",
-    textAlign: "center",
   },
 
   senha: {
     width: "100%",
-    height: "17.5%",
-    marginBottom: 20,
+    marginBottom: 15,
     borderRadius: 10,
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
+    flexDirection: "row",
+    paddingVertical: 10,
+    opacity: 0.7,
   },
   senhaTitle: {
     color: "#fff",
@@ -171,9 +169,6 @@ export default StyleSheet.create({
     width: "100%",
     padding: 10,
     borderRadius: 5,
-    position: "absolute",
-    top: 10,
-    zIndex: 999999,
   },
   input: {
     width: "100%",
@@ -289,12 +284,20 @@ export default StyleSheet.create({
   },
   lastSenha: {
     width: "100%",
-    height: "17.5%",
+    height: "20%",
     marginBottom: 20,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
+  divider: {
+    width: "95%",
+    opacity: 0.2,
+    height: 2,
+    backgroundColor: "#fff",
+    marginBottom: 10,
+  },
+
   lastSenhaText: {
     color: "#FFF",
     fontSize: 50,
@@ -304,7 +307,30 @@ export default StyleSheet.create({
   lastweatherDate: {
     color: "#FFF",
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "500",
+    opacity: 0.7,
     textAlign: "center",
+  },
+  senhaHeader: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+    borderRadius: 10,
+    backgroundColor: "#121212",
+  },
+  outrasSenhas: {
+    width: "100%",
+    flexDirection: "column",
+  },
+  outrasSenhasTitle: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    width: "100%",
+    padding: 10,
+    borderRadius: 5,
   },
 });

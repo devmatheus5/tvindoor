@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image } from "react-native";
 import useInfo from "../../../hooks/useInfo";
 import styles from "../styles";
 const NewsCard = () => {
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
   const { news } = useInfo();
   const handleNews = useCallback(() => {
-    setCurrentNewsIndex((prevIndex) =>
-      prevIndex === news.length - 1 ? 0 : prevIndex + 1
+    setCurrentNewsIndex(
+      currentNewsIndex == news.length - 1 ? 0 : currentNewsIndex + 1
     );
-  }, [news.length]);
+  }, [currentNewsIndex]);
 
   useEffect(() => {
     const interval = setInterval(handleNews, 30000);
     return () => clearInterval(interval);
   }, [handleNews]);
-
   return (
     <View style={styles.videoContent}>
       {news && news[currentNewsIndex]?.image_url ? (

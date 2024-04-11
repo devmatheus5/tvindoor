@@ -34,20 +34,24 @@ function MediaScreen() {
     setFormInput("");
   };
   const focusInput = () => {
-    inputRef.current && inputRef.current.focus();
+    inputRef.current.focus();
   };
 
   useEffect(() => {
+    const keys = inputRef.current;
+    if (!keys) {
+      return;
+    }
     focusInput();
   }, [inputRef.current]);
-
   return (
     <KeyboardAvoidingView behavior="height" style={styles.body}>
       <View style={styles.container}>
         <View style={styles.inner}>
           <View style={styles.video}>
+            {!value.user.hnews && <NewsCard />}
+
             <VideosCard />
-            {value?.user?.hnews == "true" && <NewsCard />}
             <VtCard />
           </View>
 

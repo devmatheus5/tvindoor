@@ -19,6 +19,7 @@ const useInfo = () => {
       if (data.USD.bid) {
         const parsedDollar = parseFloat(data.USD.bid).toFixed(2);
         setDollar(parsedDollar);
+        console.log("infodol");
       }
     } catch (error) {
       setError(error);
@@ -40,6 +41,7 @@ const useInfo = () => {
       const data = await response.json();
       const results = data.results;
       setWeather(results);
+      console.log("infowea");
     } catch (error) {
       setError(error);
     } finally {
@@ -63,15 +65,16 @@ const useInfo = () => {
 
       const data = await response.json();
       setNews(data.results);
+      console.log("infonews");
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
+    getNews();
     getDollar();
     getCity();
-    getNews();
   }, []);
 
   return { dollar, weather, news };

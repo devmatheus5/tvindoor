@@ -60,7 +60,6 @@ export default function OverlayNew({ newBalcao }) {
 
     return () => loop.stop();
   }, [opacityAnimation]);
-
   return (
     <>
       <View style={styles.overlay} />
