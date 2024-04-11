@@ -46,43 +46,109 @@ function HomeScreen({ navigation }) {
     if (!lastEventType) {
       return;
     }
-    if (lastEventType == "up") {
-      setFocused("config");
-      configRef.current.focus();
+
+    if (focused == "") {
+      switch (lastEventType) {
+        case "select":
+          handleShow();
+          break;
+        case "up":
+          if (show) {
+            setFocused("config");
+            configRef.current && configRef.current.focus();
+          } else {
+            handleShow();
+          }
+          break;
+        case "down":
+          break;
+        case "left":
+          break;
+        case "right":
+          break;
+        default:
+          handleShow();
+          break;
+      }
+    } else if (focused == "config") {
+      switch (lastEventType) {
+        case "select":
+          navigation.navigate("Login");
+          setFocused("");
+          configRef.current.blur();
+          break;
+        case "up":
+          break;
+        case "down":
+          setFocused("");
+          configRef.current.blur();
+          break;
+        case "left":
+          break;
+        case "right":
+          setFocused("sair");
+          sairRef.current.focus();
+
+          break;
+        default:
+          break;
+      }
+    } else if (focused == "sair") {
+      switch (lastEventType) {
+        case "select":
+          setFocused("");
+          sairRef.current.blur();
+          setShow(false);
+          break;
+        case "up":
+          break;
+        case "down":
+          setFocused("");
+          sairRef.current.blur();
+          break;
+        case "left":
+          setFocused("config");
+          configRef.current.focus();
+          break;
+        case "right":
+          break;
+        default:
+          break;
+      }
     }
   }, [lastEventType]);
 
   return (
     <TouchableWithoutFeedback ref={touchableRef} onPress={handleShow}>
       <View style={styles.container}>
-        <Text style={{ color: "white", fontSize: 40 }}>{focused}</Text>
-        <Text style={{ color: "white", fontSize: 40 }}>{lastEventType}</Text>
-        <View style={styles.header}>
-          <TouchableOpacity
-            ref={configRef}
-            onFocus={() => Alert.alert("Configurar")}
-            onPress={() => navigation.navigate("Login")}
-            style={[
-              styles.button,
-              {
-                opacity: focused === "config" ? 0.5 : 1,
-              },
-            ]}
-          >
-            <Text style={styles.text}>Configurar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            ref={sairRef}
-            style={[
-              styles.button,
-              {
-                opacity: focused === "sair" ? 0.5 : 1,
-              },
-            ]}
-          >
-            <Text style={styles.text}>Sair</Text>
-          </TouchableOpacity>
-        </View>
+        {show && (
+          <View style={styles.header}>
+            <TouchableOpacity
+              ref={configRef}
+              onFocus={() => Alert.alert("Configurar")}
+              onPress={() => navigation.navigate("Login")}
+              style={[
+                styles.button,
+                {
+                  opacity: focused === "config" ? 1 : 0.7,
+                },
+              ]}
+            >
+              <Text style={styles.text}>Configurar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              ref={sairRef}
+              style={[
+                styles.button,
+                {
+                  opacity: focused === "sair" ? 1 : 0.7,
+                },
+              ]}
+            >
+              <Text style={styles.text}>Sair</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
