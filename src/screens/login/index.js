@@ -1,51 +1,50 @@
+
+import React, { useContext, useRef, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
   Text,
   TextInput,
-  View,
   TouchableOpacity,
-  Alert,
-  useWindowDimensions,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Keyboard,
+  View,
 } from "react-native";
-import styles from "./styles";
 import { Feather } from "@expo/vector-icons";
-import { useContext, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-import { Intervalos } from "../../services/values";
 import { AuthContext } from "../../hooks/auth";
-import { TVEventHandler, useTVEventHandler } from "react-native";
+import { Intervalos } from "../../services/values";
+import styles from "./styles";
+
 function LoginScreen({ navigation }) {
   const passwordRef = useRef();
   const { value } = useContext(AuthContext);
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState("");
   const [intervalGap, setIntervalGap] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({
-    user: "",
-    password: "",
-  });
-  const handleSave = async () => {
-    setLoading(true);
+  const [error, setError] = useState({ user: "", password: "" });
 
-    setError({ user: "", password: "" });
-
+  const validateInputs = () => {
     if (!user) {
-      setError({ ...error, user: "Preencha um usuário válido" });
-      setLoading(false);
-      return;
+      return "Preencha um usuário válido";
     }
     if (!password || password.length < 5) {
-      setError({
-        ...error,
-        password:
-          password.length < 5
-            ? "Senha deve ter 5 dígitos"
-            : "Preencha uma senha válida",
-      });
+      return password.length < 5
+        ? "Senha deve ter 5 dígitos"
+        : "Preencha uma senha válida";
+    }
+    return null;
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    setError({ user: "", password: "" });
+
+    const validationError = validateInputs();
+    if (validationError) {
+      setError({ ...error, user: validationError });
       setLoading(false);
       return;
     }
@@ -54,13 +53,12 @@ function LoginScreen({ navigation }) {
       const result = await value.Login(user, password, intervalGap);
       if (result) {
         navigation.navigate("Media");
-        setLoading(false);
       } else {
         Alert.alert("Erro", "Usuário ou senha inválidos");
-        setLoading(false);
       }
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -68,11 +66,11 @@ function LoginScreen({ navigation }) {
   const handleNext = (ref) => {
     ref.current.focus();
   };
-  return (
-    <KeyboardAvoidingView style={styles.container} behavior="height">
-      <View style={styles.inner}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Configurar estação </Text>
+return (
+  <KeyboardAvoidingView style={styles.container} behavior="height">
+  <View style={styles.inner}>
+    <View style={styles.header}>
+      <Text style={styles.title}>Configurar estação </Text>
         </View>
         <View style={styles.inputAreaLandscape}>
           <View style={styles.box}>

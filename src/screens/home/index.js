@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  Alert,
+  Linking,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -8,73 +8,80 @@ import {
 } from "react-native";
 import styles from "./styles";
 import { useTVEventHandler } from "react-native";
-
 function HomeScreen({ navigation }) {
   const [focused, setFocused] = useState(0);
-  const [lastEventType, setLastEventType] = React.useState("");
-  const refs = useRef([
-    React.createRef(),
-    React.createRef(),
-    React.createRef(),
+  const [show, setShow] = useState(false);
+  const [selectCount, setSelectCount] = useState(0);
+  const buttons = useRef([
+    {
+      ref: useRef(),
+      label: "Configurar",
+      onPress: () => navigation.navigate("Login"),
+    },
+    {
+      ref: useRef(),
+      label: "Sair",
+      onPress: () => Linking.sendIntent("android.intent.action.MAIN"),
+    },
   ]);
-  const onPressHandlers = [
-    () => Alert.alert("Button 1 pressed"),
-    () => Alert.alert("Button 2 pressed"),
-    () => Alert.alert("Button 3 pressed"),
-  ];
-
+  const handleFocusChange = (direction) => {
+    setFocused((prev) => (prev + direction + 2) % 2);
+  };
   const myTVEventHandler = (evt) => {
-    setLastEventType(evt.eventType);
-    if (evt.eventType === "right" && evt.eventKeyAction == 0) {
-      setFocused((prev) => (prev + 1) % 3);
-    } else if (evt.eventType === "left" && evt.eventKeyAction == 0) {
-      setFocused((prev) => (prev - 1 + 3) % 3);
-    } else if (evt.eventType === "select" && evt.eventKeyAction == 0) {
-      onPressHandlers[focused]();
+    if (evt.eventType === "down" && evt.eventKeyAction == 1) {
+      setShow(false);
+    } else if (evt.eventType === "right" && evt.eventKeyAction == 1) {
+      handleFocusChange(1);
+    } else if (evt.eventType === "left" && evt.eventKeyAction == 1) {
+      handleFocusChange(-1);
+    } else if (evt.eventType === "select" && evt.eventKeyAction == 1) {
+      if (!show) {
+        setSelectCount((prev) => prev + 1);
+        if (selectCount >= 1) {
+          setShow(true);
+          setSelectCount(0);
+        }
+      } else {
+        buttons.current[focused].onPress();
+      }
     }
   };
-
   useTVEventHandler(myTVEventHandler);
-
-  useEffect(() => {
-    if (refs.current[focused]) {
-      refs.current[focused].current.focus();
-    }
-  }, [focused]);
-
   return (
     <TouchableWithoutFeedback>
       <View style={styles.container}>
         <View style={styles.header}>
-          {Array.from({ length: 3 }).map((_, i) => (
+          {buttons.current.map((button, i) => (
             <TouchableOpacity
               key={i}
-              ref={refs.current[i]}
-              onFocus={() => {
-                setFocused(i);
-                console.log("focused", i);
-              }}
-              onBlur={() => console.log("blurred", i)}
+              ref={button.ref}
               style={[
                 styles.button,
-                focused === i && { backgroundColor: "red" },
+                focused === i && { backgroundColor: "white" },
               ]}
-              onPress={onPressHandlers[i]}
+              onPress={button.onPress}
             >
-              <Text style={styles.text}>Button {i + 1}</Text>
+              <Text style={styles.text}>{button.label}</Text>
             </TouchableOpacity>
           ))}
+          {!show && (
+            <TouchableWithoutFeedback onPress={() => setSelectCount((prev) => prev + 1)}>
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  backgroundColor: "black",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+              </View>
+            </TouchableWithoutFeedback>
+          )}
         </View>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 30,
-            textAlign: "center",
-            marginBottom: 50,
-          }}
-        >
-          {lastEventType}
-        </Text>
       </View>
     </TouchableWithoutFeedback>
   );
