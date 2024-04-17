@@ -43,20 +43,7 @@ const VideoCard = () => {
           }
         }}
       />
-      <TouchableOpacity
-        onPress={() =>
-          value?.setUser({
-            ...value?.user,
-            hnews: !value?.user?.hnews,
-          })
-        }
-        style={styles.logo}
-      >
-        <Image
-          style={styles.logoImg}
-          source={require("../../../../assets/logo.png")}
-        />
-      </TouchableOpacity>
+      
     </View>
   );
 };

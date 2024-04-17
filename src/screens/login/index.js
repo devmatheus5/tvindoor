@@ -1,5 +1,4 @@
-
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -9,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  useTVEventHandler,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -17,12 +17,14 @@ import { Intervalos } from "../../services/values";
 import styles from "./styles";
 
 function LoginScreen({ navigation }) {
+  const userRef = useRef();
   const passwordRef = useRef();
+  const intervalRef = useRef();
   const { value } = useContext(AuthContext);
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
-  const [intervalGap, setIntervalGap] = useState(1);
+  const [intervalGap, setIntervalGap] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ user: "", password: "" });
 
@@ -66,91 +68,94 @@ function LoginScreen({ navigation }) {
   const handleNext = (ref) => {
     ref.current.focus();
   };
-return (
-  <KeyboardAvoidingView style={styles.container} behavior="height">
-  <View style={styles.inner}>
-    <View style={styles.header}>
-      <Text style={styles.title}>Configurar estação </Text>
+
+  return (
+    <View style={styles.inner}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Configurar estação </Text>
+      </View>
+      <View style={styles.inputAreaLandscape}>
+        <View style={styles.box}>
+          {error.user ? (
+            <Text style={styles.errorMensage}>{error.user}</Text>
+          ) : null}
+          <Text style={styles.label}>Usuário</Text>
+          <TextInput
+            ref={userRef}
+            autoCapitalize="none"
+            showSoftInputOnFocus={false}
+            autoComplete="off"
+            placeholderTextColor={"#fff"}
+            value={user}
+            onChangeText={setUser}
+            style={styles.input}
+            placeholder="Usuário"
+            onSubmitEditing={() => handleNext(passwordRef)}
+          />
         </View>
-        <View style={styles.inputAreaLandscape}>
-          <View style={styles.box}>
-            {error.user ? (
-              <Text style={styles.errorMensage}>{error.user}</Text>
-            ) : null}
-            <Text style={styles.label}>Usuário</Text>
+        <View style={styles.box}>
+          {error.password ? (
+            <Text style={styles.errorMensage}>{error.password}</Text>
+          ) : null}
+
+          <Text style={styles.label}>Senha</Text>
+          <View style={styles.boxSenha}>
             <TextInput
               autoCapitalize="none"
               autoComplete="off"
+              secureTextEntry={!show}
+              value={password}
+              showSoftInputOnFocus={false}
+              onChangeText={setPassword}
               placeholderTextColor={"#fff"}
-              value={user}
-              onChangeText={setUser}
-              style={styles.input}
-              placeholder="Usuário"
-              onSubmitEditing={() => handleNext(passwordRef)}
+              style={styles.inputSenha}
+              placeholder="Senha"
+              ref={passwordRef}
+              onSubmitEditing={() => handleNext(intervalRef)}
             />
-          </View>
-          <View style={styles.box}>
-            {error.password ? (
-              <Text style={styles.errorMensage}>{error.password}</Text>
-            ) : null}
-
-            <Text style={styles.label}>Senha</Text>
-            <View style={styles.boxSenha}>
-              <TextInput
-                autoCapitalize="none"
-                autoComplete="off"
-                placeholderTextColor={"#fff"}
-                secureTextEntry={!show}
-                value={password}
-                onChangeText={setPassword}
-                style={styles.inputSenha}
-                placeholder="Senha"
-                ref={passwordRef}
-                onSubmitEditing={() => Keyboard.dismiss()}
-              />
-              <TouchableOpacity
-                onPress={() => setShow(!show)}
-                style={styles.buttonSenha}
-              >
-                <Feather
-                  name={show ? "eye" : "eye-off"}
-                  size={24}
-                  color="white"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.box}>
-            <Text style={styles.label}>Intervalo de atualização</Text>
-            <Picker
-              mode="dropdown"
-              dropdownIconColor={"#fff"}
-              style={styles.input}
-              selectedValue={intervalGap}
-              onValueChange={(itemValue, itemIndex) =>
-                setIntervalGap(itemValue)
-              }
+            <TouchableOpacity
+              onPress={() => setShow(!show)}
+              style={[styles.buttonSenha]}
             >
-              {Intervalos.map((item) => (
-                <Picker.Item
-                  key={item.value}
-                  label={item.label}
-                  value={item.value}
-                />
-              ))}
-            </Picker>
+              <Feather
+                name={show ? "eye" : "eye-off"}
+                size={24}
+                color={"white"}
+              />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            disabled={loading}
-            onPress={() => handleSave()}
-            style={styles.button}
-          >
-            <Text style={styles.text}>{loading ? "Salvando" : "Salvar"}</Text>
-            <ActivityIndicator animating={loading} color="#fff" size={24} />
-          </TouchableOpacity>
         </View>
+        <View style={styles.box}>
+          <Text style={styles.label}>Intervalo de atualização</Text>
+          <Picker
+            ref={intervalRef}
+            dropdownIconColor={"#fff"}
+            placeholderTextColor={"#fff"}
+            style={styles.inputSenha}
+            selectedValue={intervalGap}
+            onValueChange={(itemValue, itemIndex) => {
+              setIntervalGap(itemValue);
+            }}
+          >
+            {Intervalos.map((item) => (
+              <Picker.Item
+                key={item.value}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
+          </Picker>
+        </View>
+        <TouchableOpacity
+          onPress={() => handleSave()}
+          disabled={loading}
+          style={styles.button}
+        >
+          <Text style={styles.text}>{loading ? "Salvando" : "Salvar"}</Text>
+          <ActivityIndicator animating={loading} color="#fff" size={24} />
+        </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 export default LoginScreen;

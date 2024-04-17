@@ -3,8 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   body: {
     flex: 1,
-  },
-  container: {
+  }, container: {
     flex: 1,
     alignItems: "center",
     backgroundColor: "#000000",
@@ -145,26 +144,65 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
   },
+  menu: {
+    backgroundColor: "#fff",
+    position: "absolute",
+    top: 56,
+
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 11.14,
+    elevation: 17,
+    zIndex: 999,
+
+    right: 0,
+    height: "20%",
+  },
+  menuItem: {
+    padding: 5,
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+  menuText: {
+    color: "#000",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    textAlign: "left",
+  },
   senhaText: {
     color: "#FFF",
-    fontSize: 50,
+    fontSize: 45,
     fontWeight: "bold",
+    marginTop: 18,
   },
 
   senha: {
     width: "100%",
+    borderRadius: 10,
     marginBottom: 15,
     borderRadius: 10,
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
     alignItems: "center",
-    flexDirection: "row",
+    opacity: 0.85,
     paddingVertical: 10,
-    opacity: 0.7,
   },
   senhaTitle: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 25,
+    marginTop: 10,
     textAlign: "center",
     width: "100%",
     padding: 10,
@@ -284,18 +322,17 @@ export default StyleSheet.create({
   },
   lastSenha: {
     width: "100%",
-    height: "20%",
+    height: "15.5%",
     marginBottom: 20,
     borderRadius: 10,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   divider: {
     width: "95%",
-    opacity: 0.2,
+    opacity: 0.8,
     height: 2,
     backgroundColor: "#fff",
-    marginBottom: 10,
   },
 
   lastSenhaText: {
@@ -327,10 +364,16 @@ export default StyleSheet.create({
   outrasSenhasTitle: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 14,
     textAlign: "center",
-    width: "100%",
-    padding: 10,
-    borderRadius: 5,
+    
+  },
+  senhaFooter: {
+    gap: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position:"absolute" ,
+    top:6,
   },
 });

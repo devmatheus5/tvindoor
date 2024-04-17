@@ -1,5 +1,7 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { EvilIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Image, Text, View } from "react-native";
 import styles from "../styles";
 import { handleType, sortSenhas } from "../../../utils/functions";
 const SenhasComponent = ({ Senhas }) => {
@@ -9,22 +11,7 @@ const SenhasComponent = ({ Senhas }) => {
     <View style={styles.senhaArea}>
       <Text style={styles.senhaTitle}>Senha</Text>
 
-      <View
-        style={[
-          styles.lastSenha,
-          {
-            backgroundColor: handleType(list[0]?.type),
-          },
-        ]}
-      >
-        <Text numberOfLines={1} style={styles.lastSenhaText}>
-          0{list[0]?.value}
-        </Text>
-      </View>
-      <View style={styles.divider} />
       <View style={styles.outrasSenhas}>
-        <Text style={styles.senhaTitle}>Anteriores</Text>
-
         {list?.map((item, index) => (
           <View
             key={index}
@@ -36,6 +23,31 @@ const SenhasComponent = ({ Senhas }) => {
               },
             ]}
           >
+            <View style={styles.senhaFooter}>
+            <Text style={styles.outrasSenhasTitle}>
+                {item.type == "balcao"
+                  ? "Balcão"
+                  : item.type == "garcom"
+                  ? "Garçom"
+                  : "Conta"}
+              </Text>
+              <MaterialCommunityIcons
+                style={{
+                  
+                  opacity: 0.8,
+                }}
+                name={
+                  item.type == "garcom"
+                    ? "bell-ring"
+                    : item.type == "balcao"
+                    ? "account-cog"
+                    : "text-box-check"
+                }
+                size={16}
+                color="white"
+              />
+
+            </View>
             <Text style={styles.senhaText}>{item.value}</Text>
           </View>
         ))}

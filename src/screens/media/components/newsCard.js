@@ -5,8 +5,7 @@ import styles from "../styles";
 import { AuthContext } from "../../../hooks/auth";
 import { TouchableOpacity } from "react-native";
 const NewsCard = () => {
-  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
-  const { value } = useContext(AuthContext);
+ const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
   const { news } = useInfo();
   const handleNews = useCallback(() => {
     setCurrentNewsIndex(
@@ -14,9 +13,9 @@ const NewsCard = () => {
     );
   }, [currentNewsIndex]);
 
-  useEffect(() => {
+useEffect(() => {
     const interval = setInterval(handleNews, 30000);
-    return () => clearInterval(interval);
+  return () => clearInterval(interval);
   }, [handleNews]);
   return (
     <View style={styles.videoContent}>
@@ -51,20 +50,7 @@ const NewsCard = () => {
             </View>
           </View>
 
-          <TouchableOpacity
-            onPress={() =>
-              value?.setUser({
-                ...value?.user,
-                hnews: !value?.user?.hnews,
-              })
-            }
-            style={styles.logo}
-          >
-            <Image
-              style={styles.logoImg}
-              source={require("../../../../assets/logo.png")}
-            />
-          </TouchableOpacity>
+         
         </>
       ) : (
         <Image

@@ -1,19 +1,29 @@
-import { KeyboardAvoidingView, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styles from "./styles";
 import React, { useContext, useEffect } from "react";
 import SenhasComponent from "./components/senhas";
 import NewsCard from "./components/newsCard";
 import VideosCard from "./components/videosCard";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VtCard from "./components/vt";
 import OverlayNew from "./components/overlayNew";
 import { Senhas } from "../../services/values";
 import { AuthContext } from "../../hooks/auth";
 function MediaScreen() {
   const inputRef = React.useRef(null);
+  const [show, setShow] = React.useState(false);
   const [formInput, setFormInput] = React.useState("");
   const [newBalcao, setNewBalcao] = React.useState();
   const [isOpened, setIsOpened] = React.useState(false);
   const { value } = useContext(AuthContext);
+
   const handleNewBalcao = () => {
     if (formInput === "") {
       return;
@@ -44,36 +54,117 @@ function MediaScreen() {
     }
     focusInput();
   }, [inputRef.current]);
+
+
+
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.body}>
-      <View style={styles.container}>
-        <View style={styles.inner}>
-          <View style={styles.video}>
-            {!value.user?.hnews && <NewsCard />}
+    <KeyboardAvoidingView style={styles.body} behavior="padding">
+    <View style={styles.container}>
+      <View style={styles.inner}>
+        <View style={styles.video}>
+          {value.user?.hnews && <NewsCard />}
 
-            {value?.user?.hnews && <VideosCard />}
-            <VtCard />
-          </View>
+          {!value?.user?.hnews && <VideosCard />}
+          <TouchableOpacity
+            onLongPress={() => setShow(!show)}
+            style={styles.logo}
+          >
+            <Image
+              style={styles.logoImg}
+              source={require("../../../assets/logo.png")}
+            />
+          </TouchableOpacity>
 
-          <SenhasComponent
-            Senhas={Senhas}
-            inputRef={inputRef}
-            focusInput={focusInput}
-          />
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            placeholder="Digite o número da senha"
-            keyboardType="numeric"
-            showSoftInputOnFocus={true}
-            value={formInput}
-            onChangeText={setFormInput}
-            onSubmitEditing={() => handleNewBalcao()}
-            onBlur={() => focusInput()}
-          />
+          {show && (
+            <View style={styles.menu}>
+              <TouchableOpacity
+                onPress={() =>
+                  value.setUser({
+                    ...value.user,
+                    hnews: true,
+                  })
+                }
+                style={styles.menuItem}
+              >
+                <MaterialCommunityIcons
+                  name="newspaper-variant-outline"
+                  size={18}
+                  color="black"
+                />
+
+                <Text
+                  style={[
+                    styles.menuText,
+                    {
+                      borderBottomColor: value.user.hnews ? "#000" : "#fff",
+                      borderBottomWidth: value.user.hnews ? 1 : 0,
+                    },
+                  ]}
+                >
+                  Notícias
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  value.setUser({
+                    ...value.user,
+                    hnews: false,
+                  })
+                }
+                style={styles.menuItem}
+              >
+                <MaterialCommunityIcons
+                  name="motion-play-outline"
+                  size={18}
+                  color="black"
+                />
+                <Text
+                  style={[
+                    styles.menuText,
+                    {
+                      borderBottomColor: !value.user.hnews ? "#000" : "#fff",
+                      borderBottomWidth: !value.user.hnews ? 1 : 0,
+                    },
+                  ]}
+                >
+                  Vídeos
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => value.logout()}
+                style={styles.menuItem}
+              >
+                <MaterialCommunityIcons
+                  name="logout-variant"
+                  size={18}
+                  color="black"
+                />
+                <Text style={styles.menuText}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <VtCard />
         </View>
-        {isOpened && <OverlayNew newBalcao={newBalcao} />}
+        <SenhasComponent
+          Senhas={Senhas}
+          inputRef={inputRef}
+          focusInput={focusInput}
+        />
+        <TextInput
+          ref={inputRef}
+          style={styles.input}
+          placeholder="Digite o número da senha"
+          showSoftInputOnFocus={false}
+          value={formInput}
+          onChangeText={setFormInput}
+          returnKeyType="done"
+          onSubmitEditing={() => handleNewBalcao()}
+          onBlur={() => focusInput()}
+        />
       </View>
+      {isOpened && <OverlayNew newBalcao={newBalcao} />}
+    </View>
     </KeyboardAvoidingView>
   );
 }

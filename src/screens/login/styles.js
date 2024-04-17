@@ -17,7 +17,7 @@ export default StyleSheet.create({
     padding: 10,
   },
   inputAreaPortrait: {
-    width: "85%",
+    width: "60%",
     padding: 20,
   },
   inputAreaLandscape: {

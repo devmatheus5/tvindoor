@@ -17,10 +17,9 @@ const AuthProvider = ({ children }) => {
       cidade: "petrolina",
     };
     try {
-      Alert.alert("Login", "Realizando login...");
       await AsyncStorage.setItem("@user", JSON.stringify(data));
+      setUser(data);
       setLoggedIn(true);
-      Alert.alert("Sucesso", "Login realizado com sucesso!");
       return true;
     } catch (error) {
       Alert.alert("Erro", "Erro ao realizar login");
@@ -38,6 +37,7 @@ const AuthProvider = ({ children }) => {
     if (!user) {
       return;
     }
+
     setUser(JSON.parse(user));
     setLoggedIn(true);
   };

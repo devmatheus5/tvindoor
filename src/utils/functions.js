@@ -3,7 +3,7 @@ export function handleType(type) {
     case "garcom":
       return "#28a745"; // Verde para garçom
     case "balcao":
-      return "#161616"; // Preto para balcão
+      return "#1c1c1a"; // Preto para balcão
     case "encerrar":
       return "red"; // Vermelho para encerrar
     default:

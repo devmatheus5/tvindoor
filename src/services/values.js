@@ -1,4 +1,5 @@
 export const Intervalos = [
+  { label: "Selecionar", value: 0 },
   { label: "1 segundo", value: 1 },
   { label: "5 segundos", value: 5 },
   { label: "30 segundos", value: 30 },

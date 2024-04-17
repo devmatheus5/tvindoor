@@ -1,56 +1,32 @@
 import React, { useEffect, useRef } from "react";
-import { Text, View, Animated } from "react-native";
+import { Text, View, Animated, Easing } from "react-native";
 import styles from "../styles";
 
 export default function OverlayNew({ newBalcao }) {
-  const opacityAnimation = useRef(new Animated.Value(0.4)).current;
+  
+  const opacityAnimation = useRef(new Animated.Value(0.6)).current;
   const scaleAnimation = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
+
     const sequence = Animated.sequence([
       Animated.timing(scaleAnimation, {
         toValue: 1.2,
-        duration: 300,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
       Animated.timing(opacityAnimation, {
         toValue: 0.6,
-        duration: 300,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
-
-      Animated.timing(opacityAnimation, {
-        toValue: 0.8,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(opacityAnimation, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(opacityAnimation, {
-        toValue: 0.8,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(opacityAnimation, {
-        toValue: 0.6,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(opacityAnimation, {
-        toValue: 0.4,
-        duration: 300,
-        useNativeDriver: true,
-      }),
+      // ...
       Animated.timing(scaleAnimation, {
         toValue: 1,
-        duration: 300,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
     ]);
@@ -61,7 +37,7 @@ export default function OverlayNew({ newBalcao }) {
     return () => loop.stop();
   }, [opacityAnimation]);
   return (
-    <>
+    <> 
       <View style={styles.overlay} />
       <Animated.View
         style={[
