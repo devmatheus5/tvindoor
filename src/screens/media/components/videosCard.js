@@ -20,7 +20,7 @@ const VideoCard = () => {
         ref={video}
         style={styles.playerVideo}
         source={{ uri: videoUrls[currentVideoIndex] }}
-        useNativeControls={false}
+        useNativeControls={true}
         onError={(error) => {
           playNextVideo(
             currentVideoIndex,
@@ -32,6 +32,9 @@ const VideoCard = () => {
         resizeMode={ResizeMode.COVER}
         isLooping={false}
         shouldPlay={true}
+        onReadyForDisplay={() => {
+          video.current.playAsync();
+        }}
         onPlaybackStatusUpdate={(status) => {
           if (status.didJustFinish) {
             playNextVideo(
@@ -43,7 +46,6 @@ const VideoCard = () => {
           }
         }}
       />
-      
     </View>
   );
 };

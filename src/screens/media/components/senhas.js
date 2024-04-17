@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Image, Text, View } from "react-native";
+import { Animated, Image, ScrollView, Text, View } from "react-native";
 import styles from "../styles";
 import { handleType, sortSenhas } from "../../../utils/functions";
 const SenhasComponent = ({ Senhas }) => {
   const list = sortSenhas(Senhas);
+  const translateXAnimation = useRef(new Animated.Value(1)).current;
 
   return (
     <View style={styles.senhaArea}>
       <Text style={styles.senhaTitle}>Senha</Text>
 
-      <View style={styles.outrasSenhas}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.outrasSenhas}
+      >
         {list?.map((item, index) => (
           <View
             key={index}
@@ -24,7 +28,7 @@ const SenhasComponent = ({ Senhas }) => {
             ]}
           >
             <View style={styles.senhaFooter}>
-            <Text style={styles.outrasSenhasTitle}>
+              <Text style={styles.outrasSenhasTitle}>
                 {item.type == "balcao"
                   ? "Balcão"
                   : item.type == "garcom"
@@ -33,7 +37,6 @@ const SenhasComponent = ({ Senhas }) => {
               </Text>
               <MaterialCommunityIcons
                 style={{
-                  
                   opacity: 0.8,
                 }}
                 name={
@@ -46,12 +49,21 @@ const SenhasComponent = ({ Senhas }) => {
                 size={16}
                 color="white"
               />
-
             </View>
-            <Text style={styles.senhaText}>{item.value}</Text>
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.senhaText,
+                {
+                  transform: [{ translateX: item.value.length > 3 ? -10 : 0 }],
+                },
+              ]}
+            >
+              {item.value}
+            </Text>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };

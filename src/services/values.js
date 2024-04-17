@@ -29,6 +29,8 @@ export const Senhas = [
 ];
 
 export const videoUrls = [
-  "https://www.w3schools.com/html/mov_bbb.mp4",
-  "https://www.w3schools.com/html/mov_bbb.mp4",
+  "https://dev.rutherles.pt/videos/vi1.mp4",
+  "https://dev.rutherles.pt/videos/vi2.mp4",
+  "https://dev.rutherles.pt/videos/vi3.mp4",
+  "https://dev.rutherles.pt/videos/vi4.mp4",
 ];

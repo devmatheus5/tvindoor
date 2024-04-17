@@ -98,3 +98,18 @@ export function sortSenhas(senhas) {
 
   return senhas;
 }
+
+export const RelativeFontSize = (length) => {
+  if (length <= 4) {
+    return 45;
+  }
+  if (length > 4 && length <= 6) {
+    return 40;
+  }
+  if (length > 6 && length <= 8) {
+    return 35;
+  }
+  if (length > 8 && length <= 10) {
+    return 30;
+  }
+};

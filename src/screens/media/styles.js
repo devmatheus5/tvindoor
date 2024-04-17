@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   body: {
     flex: 1,
-  }, container: {
+  },
+  container: {
     flex: 1,
     alignItems: "center",
     backgroundColor: "#000000",
@@ -202,8 +203,8 @@ export default StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 25,
-    marginTop: 10,
-    textAlign: "center",
+
+    textAlign: "left",
     width: "100%",
     padding: 10,
     borderRadius: 5,
@@ -300,7 +301,7 @@ export default StyleSheet.create({
     zIndex: 9999,
   },
   balcaonew: {
-    width: "50%",
+    width: "100%",
     height: "75%",
     top: "5%",
     backgroundColor: "#000",
@@ -312,7 +313,7 @@ export default StyleSheet.create({
   },
   balcaonewtext: {
     color: "#ffffff",
-    fontSize: 200,
+    fontSize: 150,
     fontWeight: "700",
   },
   balcaonewlabel: {
@@ -366,14 +367,13 @@ export default StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     textAlign: "center",
-    
   },
   senhaFooter: {
     gap: 6,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    position:"absolute" ,
-    top:6,
+    position: "absolute",
+    top: 6,
   },
 });
