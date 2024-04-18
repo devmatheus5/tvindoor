@@ -10,24 +10,35 @@ const VideoCard = () => {
   const video = useRef(null);
   const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  function handleChangeMedia() {
+    if (value?.user?.hnews == true) {
+      value.setCurrentMedia("news");
+    }
+  }
+
+  function handleNextVideo() {
+    playNextVideo(
+      currentVideoIndex,
+      videoUrls,
+      setCurrentVideoIndex,
+      video,
+      handleChangeMedia
+    );
+  }
   return (
     <View style={styles.videoContent}>
       <Video
         usePoster={true}
         PosterComponent={Image}
-        posterStyle={styles.poster}
+        posterStyle={styles.newst}
         posterSource={require("../../../../assets/thumb.png")}
         ref={video}
         style={styles.playerVideo}
         source={{ uri: videoUrls[currentVideoIndex] }}
         useNativeControls={true}
         onError={(error) => {
-          playNextVideo(
-            currentVideoIndex,
-            videoUrls,
-            setCurrentVideoIndex,
-            video
-          );
+          console.error("Error:", error);
+          handleNextVideo();
         }}
         resizeMode={ResizeMode.COVER}
         isLooping={false}
@@ -37,12 +48,7 @@ const VideoCard = () => {
         }}
         onPlaybackStatusUpdate={(status) => {
           if (status.didJustFinish) {
-            playNextVideo(
-              currentVideoIndex,
-              videoUrls,
-              setCurrentVideoIndex,
-              video
-            );
+            handleNextVideo();
           }
         }}
       />

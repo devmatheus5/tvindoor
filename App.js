@@ -13,15 +13,12 @@ function useAppUpdates() {
           await Updates.fetchUpdateAsync();
           await Updates.reloadAsync();
         }
-      } catch (error) {
-        console.error("Erro ao verificar atualizações: ", error);
-      }
+      } catch (error) {}
     }
 
     onFetchUpdateAsync();
   }, []);
 }
-
 export default function App() {
   useAppUpdates();
   return (

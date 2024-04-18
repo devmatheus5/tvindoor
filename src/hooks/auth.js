@@ -6,15 +6,16 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [currentMedia, setCurrentMedia] = useState("news");
 
-  const Login = async (usuario, password, intervalGap) => {
+  const Login = async (user, password, intervalGap, city) => {
     const data = {
-      usuario,
-      station: "002478",
-      token: "123456789",
+      usuario: user,
+      station: user,
+      token: "985476258",
       intervalo: intervalGap,
       hnews: true,
-      cidade: "petrolina",
+      cidade: city,
     };
     try {
       await AsyncStorage.setItem("@user", JSON.stringify(data));
@@ -45,7 +46,15 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     checkLogin();
   }, []);
-  const value = { loggedIn, Login, logout, user, setUser };
+  const value = {
+    loggedIn,
+    Login,
+    logout,
+    user,
+    setUser,
+    currentMedia,
+    setCurrentMedia,
+  };
 
   return (
     <AuthContext.Provider value={{ value }}>{children}</AuthContext.Provider>

@@ -1,3 +1,6 @@
+import axios from "axios";
+import { Alert } from "react-native";
+
 export function handleType(type) {
   switch (type) {
     case "garcom":
@@ -15,27 +18,24 @@ export const playNextVideo = async (
   currentVideoIndex,
   videoUrls,
   setCurrentVideoIndex,
-  video
+  video,
+  handleChangeMedia
 ) => {
+  await video.current?.unloadAsync();
+
   if (currentVideoIndex < videoUrls.length - 1) {
-    await video.current?.unloadAsync();
     setCurrentVideoIndex(currentVideoIndex + 1);
-    await video.current?.loadAsync(
-      { uri: videoUrls[currentVideoIndex] },
-      {},
-      false
-    );
-    await video.current?.playAsync();
   } else {
-    await video.current?.unloadAsync();
     setCurrentVideoIndex(0);
-    await video.current?.loadAsync(
-      { uri: videoUrls[currentVideoIndex] },
-      {},
-      false
-    );
-    await video.current?.playAsync();
+    handleChangeMedia();
   }
+
+  await video.current?.loadAsync(
+    { uri: videoUrls[currentVideoIndex] },
+    {},
+    false
+  );
+  await video.current?.playAsync();
 };
 
 export const formattedDate = () => {
@@ -88,28 +88,11 @@ export const getImage = (condition_slug) => {
       return require(`../../assets/none_day.png`);
   }
 };
-
 export function sortSenhas(senhas) {
   senhas.sort((senhaA, senhaB) => {
     const dateA = new Date(senhaA.data);
     const dateB = new Date(senhaB.data);
     return dateB - dateA;
   });
-
   return senhas;
 }
-
-export const RelativeFontSize = (length) => {
-  if (length <= 4) {
-    return 45;
-  }
-  if (length > 4 && length <= 6) {
-    return 40;
-  }
-  if (length > 6 && length <= 8) {
-    return 35;
-  }
-  if (length > 8 && length <= 10) {
-    return 30;
-  }
-};

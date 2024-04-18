@@ -1,12 +1,27 @@
-import React, { useRef } from "react";
-import { EvilIcons } from "@expo/vector-icons";
+import React, { useEffect, useRef, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Animated, Image, ScrollView, Text, View } from "react-native";
+import { Animated, ScrollView, Text, View } from "react-native";
 import styles from "../styles";
 import { handleType, sortSenhas } from "../../../utils/functions";
 const SenhasComponent = ({ Senhas }) => {
-  const list = sortSenhas(Senhas);
-  const translateXAnimation = useRef(new Animated.Value(1)).current;
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    setList(sortSenhas(Senhas));
+  }, [Senhas]);
+
+  const translateXAnimation = useRef(new Animated.Value(0)).current;
+  const startAnimation = () => {
+    Animated.loop(
+      Animated.timing(translateXAnimation, {
+        toValue: -100,
+        duration: 5000,
+        useNativeDriver: true,
+      })
+    ).start();
+  };
+  useEffect(() => {
+    startAnimation();
+  }, [translateXAnimation]);
 
   return (
     <View style={styles.senhaArea}>
@@ -16,53 +31,59 @@ const SenhasComponent = ({ Senhas }) => {
         showsVerticalScrollIndicator={false}
         style={styles.outrasSenhas}
       >
-        {list?.map((item, index) => (
-          <View
-            key={index}
-            style={[
-              styles.senha,
-              {
-                backgroundColor: handleType(item.type),
-                display: index == 0 ? "none" : "flex",
-              },
-            ]}
-          >
-            <View style={styles.senhaFooter}>
-              <Text style={styles.outrasSenhasTitle}>
-                {item.type == "balcao"
-                  ? "Balcão"
-                  : item.type == "garcom"
-                  ? "Garçom"
-                  : "Conta"}
-              </Text>
-              <MaterialCommunityIcons
-                style={{
-                  opacity: 0.8,
-                }}
-                name={
-                  item.type == "garcom"
-                    ? "bell-ring"
-                    : item.type == "balcao"
-                    ? "account-cog"
-                    : "text-box-check"
-                }
-                size={16}
-                color="white"
-              />
-            </View>
-            <Text
-              numberOfLines={1}
+        {list?.map((item, index) => {
+          return (
+            <View
+              key={index}
               style={[
-                styles.senhaText,
+                styles.senha,
                 {
-                  transform: [{ translateX: item.value.length > 3 ? -10 : 0 }],
+                  backgroundColor: handleType(item.type),
                 },
               ]}
             >
-              {item.value}
-            </Text>
-          </View>
-        ))}
+              <View style={styles.senhaFooter}>
+                <Text style={styles.outrasSenhasTitle}>
+                  {item.type == "balcao"
+                    ? "Balcão"
+                    : item.type == "garcom"
+                    ? "Garçom"
+                    : "Conta"}
+                </Text>
+                <MaterialCommunityIcons
+                  style={{
+                    opacity: 0.8,
+                  }}
+                  name={
+                    item.type == "garcom"
+                      ? "bell-ring"
+                      : item.type == "balcao"
+                      ? "account-cog"
+                      : "text-box-check"
+                  }
+                  size={16}
+                  color="white"
+                />
+              </View>
+              <ScrollView horizontal style={{}}>
+                <Animated.Text
+                  style={[
+                    styles.senhaText,
+                    {
+                      transform:
+                        item.value.toString().length > 4
+                          ? [{ translateX: translateXAnimation }]
+                          : [],
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                >
+                  {item.value}
+                </Animated.Text>
+              </ScrollView>
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );

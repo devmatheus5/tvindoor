@@ -55,6 +55,12 @@ export default StyleSheet.create({
     height: "100%",
     resizeMode: "contain",
   },
+  newst: {
+    width: "75%",
+    height: "75%",
+    alignSelf: "center",
+    marginTop: "7.5%",
+  },
   weater: {
     flexDirection: "row",
     alignItems: "center",
@@ -122,14 +128,7 @@ export default StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 11.14,
-    elevation: 17,
+
     zIndex: 999,
   },
   logoImg: {
@@ -187,6 +186,7 @@ export default StyleSheet.create({
     fontSize: 45,
     fontWeight: "bold",
     marginTop: 18,
+    textAlign: "center",
   },
 
   senha: {
@@ -203,11 +203,9 @@ export default StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 25,
-
     textAlign: "left",
     width: "100%",
-    padding: 10,
-    borderRadius: 5,
+    marginBottom: 10,
   },
   input: {
     width: "100%",
@@ -227,7 +225,6 @@ export default StyleSheet.create({
     backgroundColor: "#000", // Cor do background
     opacity: 0.1,
     zIndex: 999999,
-    // Opacidade do background (entre 0 e 1)
   },
   newsArea: {
     width: "100%",
@@ -261,8 +258,6 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     justifyContent: "flex-start",
-    maxWidth: "100%",
-    maxHeight: "100%",
     marginBottom: 15,
   },
   newsDescriptionBox: {
@@ -291,14 +286,14 @@ export default StyleSheet.create({
     left: 20,
     width: 40,
     height: 40,
-    zIndex: 999999,
+    zIndex: 99999,
   },
   overlay: {
     position: "absolute",
     width: "100%",
     height: "100%",
     backgroundColor: "rgba(0,0,0,1)",
-    zIndex: 9999,
+    zIndex: 9999999999,
   },
   balcaonew: {
     width: "100%",

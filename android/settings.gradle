@@ -1,4 +1,4 @@
-rootProject.name = 'tvindoor'
+rootProject.name = 'TV Indoor'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -1,10 +1,12 @@
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  useTVEventHandler,
 } from "react-native";
 import styles from "./styles";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,7 +26,6 @@ function MediaScreen() {
   const [newBalcao, setNewBalcao] = React.useState();
   const [isOpened, setIsOpened] = React.useState(false);
   const { value } = useContext(AuthContext);
-
   const [sound, setSound] = useState();
 
   async function playSound() {
@@ -33,38 +34,41 @@ function MediaScreen() {
     );
     setSound(sound);
 
-    console.log("Playing Sound");
     await sound.playAsync();
   }
 
   useEffect(() => {
-    return sound
-      ? () => {
-          console.log("Unloading Sound");
-          sound.unloadAsync();
-        }
-      : undefined;
+    if (!sound) return;
+
+    return () => {
+      sound.unloadAsync();
+    };
   }, [sound]);
 
   const handleNewBalcao = () => {
-    if (formInput === "") {
+    if (formInput == "") {
+      return;
+    } else if (isNaN(formInput)) {
+      setFormInput("");
       return;
     }
+
     const data = {
       value: parseInt(formInput),
       type: "balcao",
       data: new Date().toISOString(),
       status: "pendente",
     };
+
+    Senhas.unshift(data);
+    setFormInput("");
+
     setNewBalcao(data);
     setIsOpened(true);
     playSound();
-    setTimeout(() => {
-      setIsOpened(false);
-    }, 5000);
 
-    Senhas.push(data);
-    setFormInput("");
+    const closeAfterTimeout = () => setIsOpened(false);
+    setTimeout(closeAfterTimeout, 5000);
   };
   const focusInput = () => {
     inputRef.current.focus();
@@ -78,33 +82,39 @@ function MediaScreen() {
     focusInput();
   }, [inputRef.current]);
 
+  const handleEnter = () => {
+    if (inputRef.current.isFocused()) {
+      handleNewBalcao();
+    }
+  };
+  const myEventHandler = (evt) => {
+    if (evt.eventType === "select" && evt.eventKeyAction == 1) {
+      handleEnter();
+    }
+  };
+  useTVEventHandler(myEventHandler);
+
   return (
-    <KeyboardAvoidingView style={styles.body} behavior="padding">
-      <View style={styles.container}>
-        <View style={styles.inner}>
-          <View style={styles.video}>
-            {value.user?.hnews && <NewsCard />}
+    <View style={styles.container}>
+      <View style={styles.inner}>
+        <View style={styles.video}>
+          {value.currentMedia == "news" && <NewsCard />}
 
-            {!value?.user?.hnews && <VideosCard />}
-            <TouchableOpacity
-              onPress={() => setShow(!show)}
-              style={styles.logo}
-            >
-              <Image
-                style={styles.logoImg}
-                source={require("../../../assets/logo.png")}
-              />
-            </TouchableOpacity>
+          {value.currentMedia == "video" && <VideosCard />}
+          <TouchableOpacity onPress={() => setShow(!show)} style={styles.logo}>
+            <Image
+              style={styles.logoImg}
+              source={require("../../../assets/logo.png")}
+            />
+          </TouchableOpacity>
 
-            {show && (
-              <View style={styles.menu}>
+          {show && (
+            <View style={styles.menu}>
+              {value?.user?.hnews == true && (
                 <TouchableOpacity
                   onPress={() => {
-                    value.setUser({
-                      ...value.user,
-                      hnews: true,
-                    }),
-                      setShow(!show);
+                    value.setCurrentMedia("news");
+                    setShow(!show);
                   }}
                   style={styles.menuItem}
                 >
@@ -118,79 +128,75 @@ function MediaScreen() {
                     style={[
                       styles.menuText,
                       {
-                        borderBottomColor: value.user.hnews ? "#000" : "#fff",
-                        borderBottomWidth: value.user.hnews ? 1 : 0,
+                        borderBottomColor:
+                          value.currentMedia == "news" ? "#000" : "#fff",
+                        borderBottomWidth: value.currentMedia == "news" ? 1 : 0,
                       },
                     ]}
                   >
                     Notícias
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    value.setUser({
-                      ...value.user,
-                      hnews: false,
-                    }),
-                      setShow(!show);
-                  }}
-                  style={styles.menuItem}
-                >
-                  <MaterialCommunityIcons
-                    name="motion-play-outline"
-                    size={18}
-                    color="black"
-                  />
-                  <Text
-                    style={[
-                      styles.menuText,
-                      {
-                        borderBottomColor: !value.user.hnews ? "#000" : "#fff",
-                        borderBottomWidth: !value.user.hnews ? 1 : 0,
-                      },
-                    ]}
-                  >
-                    Vídeos
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => value.logout()}
-                  style={styles.menuItem}
-                >
-                  <MaterialCommunityIcons
-                    name="logout-variant"
-                    size={18}
-                    color="black"
-                  />
-                  <Text style={styles.menuText}>Sair</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+              )}
 
-            <VtCard />
-          </View>
-          <SenhasComponent
-            Senhas={Senhas}
-            inputRef={inputRef}
-            focusInput={focusInput}
-          />
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            placeholder="Digite o número da senha"
-            showSoftInputOnFocus={true}
-            value={formInput}
-            onChangeText={setFormInput}
-            returnKeyType="done"
-            onSubmitEditing={() => handleNewBalcao()}
-            onBlur={() => {
-              focusInput();
-            }}
-          />
+              <TouchableOpacity
+                onPress={() => {
+                  value.setCurrentMedia("video");
+                  setShow(!show);
+                }}
+                style={styles.menuItem}
+              >
+                <MaterialCommunityIcons
+                  name="motion-play-outline"
+                  size={18}
+                  color="black"
+                />
+                <Text
+                  style={[
+                    styles.menuText,
+                    {
+                      borderBottomColor:
+                        value.currentMedia == "video" ? "#000" : "#fff",
+                      borderBottomWidth: value.currentMedia == "video" ? 1 : 0,
+                    },
+                  ]}
+                >
+                  Vídeos
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => value.logout()}
+                style={styles.menuItem}
+              >
+                <MaterialCommunityIcons
+                  name="logout-variant"
+                  size={18}
+                  color="black"
+                />
+                <Text style={styles.menuText}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <VtCard />
         </View>
-        {isOpened && <OverlayNew newBalcao={newBalcao} />}
+        <SenhasComponent Senhas={Senhas} />
+
+        <TextInput
+          ref={inputRef}
+          style={styles.input}
+          placeholder="Digite o número da senha"
+          showSoftInputOnFocus={false}
+          value={formInput}
+          onChangeText={setFormInput}
+          clearTextOnFocus={true}
+          onBlur={() => {
+            focusInput();
+          }}
+        />
       </View>
-    </KeyboardAvoidingView>
+      {isOpened && <OverlayNew newBalcao={newBalcao} />}
+    </View>
   );
 }
 export default React.memo(MediaScreen);

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "./auth";
+import axios from "axios";
 
 const useInfo = () => {
   const { value } = useContext(AuthContext);
@@ -19,7 +20,6 @@ const useInfo = () => {
       if (data.USD.bid) {
         const parsedDollar = parseFloat(data.USD.bid).toFixed(2);
         setDollar(parsedDollar);
-        console.log("infodol");
       }
     } catch (error) {
       setError(error);
@@ -27,54 +27,45 @@ const useInfo = () => {
   };
 
   const getCity = async () => {
-    if (weather !== "") {
-      return;
-    }
     const city = value?.user?.cidade;
-    try {
-      const response = await fetch(
-        `https://api.hgbrasil.com/weather?key=2707deed&city_name=${city}`
-      );
-      if (!response.ok) {
-        console.error("Erro ao buscar a localização pelo IP");
-      }
-      const data = await response.json();
-      const results = data.results;
-      setWeather(results);
-      console.log("infowea");
-    } catch (error) {
-      setError(error);
-    } finally {
+
+    if (!weather && city) {
+      axios
+        .get(`https://api.hgbrasil.com/weather?key=2707deed&city_name=${city}`)
+        .then((response) => {
+          const data = response.data;
+
+          const results = data.results;
+          setWeather(results);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar a cidade pelo IP", error);
+        });
     }
   };
 
   const getNews = async () => {
-    if (news.length > 0) {
-      return;
-    }
-    if (value?.user?.hnews == "false") {
+    if (value?.user?.hnews == "true") {
       return;
     }
     try {
-      const response = await fetch(
-        `https://newsdata.io/api/1/news?apikey=pub_41711ffcddf1bb82e5ad0f2ac19aac1a5bf5b&country=br&language=pt&size=3`
-      );
-      if (!response.ok) {
-        console.error("Erro ao buscar as notícias");
-      }
+      if (news.length < 2) {
+        const response = await fetch(
+          `https://newsdata.io/api/1/news?apikey=pub_422368401d2c07156ed21e62e5c6761f9a638&country=br&language=pt&size=3`
+        );
 
-      const data = await response.json();
-      setNews(data.results);
-      console.log("infonews");
+        const data = await response.json();
+        setNews(data.results);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
+    getCity();
     getNews();
     getDollar();
-    getCity();
   }, []);
 
   return { dollar, weather, news };

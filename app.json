@@ -29,7 +29,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "@react-native-tvos/config-tv"
+      [
+        "@react-native-tvos/config-tv",
+        {
+          "androidTVBanner": "./assets/icon-400x240.png"
+          
+        }
+      ]
     ],
     "extra": {
       "eas": {

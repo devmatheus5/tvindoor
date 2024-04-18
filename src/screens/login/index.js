@@ -29,10 +29,10 @@ function LoginScreen({ navigation }) {
   const [error, setError] = useState({ user: "", password: "" });
 
   const validateInputs = () => {
-    if (!user) {
+    if (!user || user !== "admin") {
       return "Preencha um usuário válido";
     }
-    if (!password || password.length < 5) {
+    if (!password || password.length < 5 || password !== "admin") {
       return password.length < 5
         ? "Senha deve ter 5 dígitos"
         : "Preencha uma senha válida";
@@ -52,7 +52,8 @@ function LoginScreen({ navigation }) {
     }
 
     try {
-      const result = await value.Login(user, password, intervalGap);
+      const city = "petrolina";
+      const result = await value.Login(user, password, intervalGap, city);
       if (result) {
         navigation.navigate("Media");
       } else {
@@ -72,7 +73,7 @@ function LoginScreen({ navigation }) {
   return (
     <View style={styles.inner}>
       <View style={styles.header}>
-        <Text style={styles.title}>Configurar estação </Text>
+        <Text style={styles.title}>Configurar estação</Text>
       </View>
       <View style={styles.inputAreaLandscape}>
         <View style={styles.box}>
