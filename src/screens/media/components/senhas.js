@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Animated, ScrollView, Text, View } from "react-native";
+import {
+  Animated,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styles from "../styles";
 import { handleType, sortSenhas } from "../../../utils/functions";
-const SenhasComponent = ({ Senhas }) => {
+const SenhasComponent = ({ Senhas, isMuted, handleIsMuted }) => {
   const [list, setList] = useState([]);
   useEffect(() => {
     setList(sortSenhas(Senhas));
@@ -26,6 +32,19 @@ const SenhasComponent = ({ Senhas }) => {
   return (
     <View style={styles.senhaArea}>
       <Text style={styles.senhaTitle}>Senha</Text>
+
+      <TouchableOpacity
+        style={styles.senhaMuteButton}
+        onPress={() => {
+          handleIsMuted();
+        }}
+      >
+        <MaterialCommunityIcons
+          name={isMuted ? "volume-off" : "volume-high"}
+          size={24}
+          color="white"
+        />
+      </TouchableOpacity>
 
       <ScrollView
         showsVerticalScrollIndicator={false}

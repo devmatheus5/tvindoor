@@ -1,5 +1,4 @@
-import axios from "axios";
-import { Alert } from "react-native";
+import { Audio } from "expo-av";
 
 export function handleType(type) {
   switch (type) {
@@ -97,3 +96,20 @@ export function sortSenhas(senhas) {
   });
   return senhas;
 }
+export async function playSound(setSound) {
+  const { sound } = await Audio.Sound.createAsync(
+    require("../../assets/alert.mp3")
+  );
+  setSound(sound);
+  await sound.playAsync();
+}
+
+export const focusInput = (ref) => {
+  ref.current.focus();
+};
+
+export const handleEnter = (ref, handleNewBalcao) => {
+  if (ref.current.isFocused()) {
+    handleNewBalcao();
+  }
+};

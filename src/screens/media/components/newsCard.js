@@ -15,7 +15,6 @@ const NewsCard = () => {
   const { news } = useInfo();
 
   const handleNews = useCallback(() => {
-    console.log(news);
     if (currentNewsIndex == news.length - 1) {
       setCurrentNewsIndex(0);
       value.setCurrentMedia("video");
@@ -80,7 +79,6 @@ const NewsCard = () => {
       style={styles.newst}
     />
   );
-
   return (
     <View style={styles.videoContent}>
       {news && news[currentNewsIndex]?.image_url

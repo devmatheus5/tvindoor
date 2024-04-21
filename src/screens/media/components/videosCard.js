@@ -6,8 +6,10 @@ import { playNextVideo } from "../../../utils/functions";
 import styles from "../styles";
 import { TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../hooks/auth";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 const VideoCard = () => {
   const video = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
   const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   function handleChangeMedia() {
@@ -20,7 +22,8 @@ const VideoCard = () => {
       videoUrls,
       setCurrentVideoIndex,
       video,
-      handleChangeMedia
+      handleChangeMedia,
+      isMuted
     );
   }
   return (
@@ -28,7 +31,7 @@ const VideoCard = () => {
       <Video
         usePoster={true}
         PosterComponent={Image}
-        posterStyle={styles.newst}
+        posterStyle={styles.playert}
         posterSource={require("../../../../assets/thumb.png")}
         ref={video}
         style={styles.playerVideo}
@@ -40,9 +43,11 @@ const VideoCard = () => {
         }}
         resizeMode={ResizeMode.COVER}
         isLooping={false}
+        isMuted={isMuted}
         shouldPlay={true}
         onReadyForDisplay={() => {
           video.current.playAsync();
+          video.current.setIsMutedAsync(isMuted);
         }}
         onPlaybackStatusUpdate={(status) => {
           if (status.didJustFinish) {
@@ -50,6 +55,19 @@ const VideoCard = () => {
           }
         }}
       />
+      <TouchableOpacity
+        style={styles.muteButton}
+        onPress={() => {
+          video.current.setIsMutedAsync(!isMuted);
+          setIsMuted(!isMuted);
+        }}
+      >
+        <MaterialCommunityIcons
+          name={isMuted ? "volume-off" : "volume-high"}
+          size={24}
+          color="black"
+        />
+      </TouchableOpacity>
     </View>
   );
 };

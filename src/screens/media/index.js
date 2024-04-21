@@ -1,7 +1,5 @@
 import {
   Image,
-  Keyboard,
-  KeyboardAvoidingView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -18,7 +16,10 @@ import VtCard from "./components/vt";
 import OverlayNew from "./components/overlayNew";
 import { Senhas } from "../../services/values";
 import { AuthContext } from "../../hooks/auth";
-import { Audio } from "expo-av";
+import { focusInput, handleEnter, playSound } from "../../utils/functions";
+import Menu from "./components/menu";
+import SenhaInput from "./components/SenhaInput";
+import useVideo from "../../hooks/useVideo";
 function MediaScreen() {
   const inputRef = React.useRef(null);
   const [show, setShow] = React.useState(false);
@@ -27,16 +28,8 @@ function MediaScreen() {
   const [isOpened, setIsOpened] = React.useState(false);
   const { value } = useContext(AuthContext);
   const [sound, setSound] = useState();
-
-  async function playSound() {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../../assets/alert.mp3")
-    );
-    setSound(sound);
-
-    await sound.playAsync();
-  }
-
+  const [isMuted, setIsMuted] = useState(false);
+  const { videoUrls } = useVideo();
   useEffect(() => {
     if (!sound) return;
 
@@ -65,13 +58,11 @@ function MediaScreen() {
 
     setNewBalcao(data);
     setIsOpened(true);
-    playSound();
-
+    if (!isMuted) {
+      playSound(setSound);
+    }
     const closeAfterTimeout = () => setIsOpened(false);
     setTimeout(closeAfterTimeout, 5000);
-  };
-  const focusInput = () => {
-    inputRef.current.focus();
   };
 
   useEffect(() => {
@@ -79,120 +70,37 @@ function MediaScreen() {
     if (!keys) {
       return;
     }
-    focusInput();
+    focusInput(inputRef);
   }, [inputRef.current]);
 
-  const handleEnter = () => {
-    if (inputRef.current.isFocused()) {
-      handleNewBalcao();
-    }
-  };
   const myEventHandler = (evt) => {
     if (evt.eventType === "select" && evt.eventKeyAction == 1) {
-      handleEnter();
+      handleEnter(inputRef, handleNewBalcao);
     }
   };
   useTVEventHandler(myEventHandler);
+  const handleIsMuted = async () => {
+    setIsMuted(!isMuted);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
         <View style={styles.video}>
           {value?.currentMedia == "news" && <NewsCard />}
-
           {value?.currentMedia == "video" && <VideosCard />}
-          <TouchableOpacity onPress={() => setShow(!show)} style={styles.logo}>
-            <Image
-              style={styles.logoImg}
-              source={require("../../../assets/logo.png")}
-            />
-          </TouchableOpacity>
-
-          {show && (
-            <View style={styles.menu}>
-              {value?.user?.hnews == true && (
-                <TouchableOpacity
-                  onPress={() => {
-                    value.setCurrentMedia("news");
-                    setShow(!show);
-                  }}
-                  style={styles.menuItem}
-                >
-                  <MaterialCommunityIcons
-                    name="newspaper-variant-outline"
-                    size={18}
-                    color="black"
-                  />
-
-                  <Text
-                    style={[
-                      styles.menuText,
-                      {
-                        borderBottomColor:
-                          value.currentMedia == "news" ? "#000" : "#fff",
-                        borderBottomWidth: value.currentMedia == "news" ? 1 : 0,
-                      },
-                    ]}
-                  >
-                    Notícias
-                  </Text>
-                </TouchableOpacity>
-              )}
-
-              <TouchableOpacity
-                onPress={() => {
-                  value.setCurrentMedia("video");
-                  setShow(!show);
-                }}
-                style={styles.menuItem}
-              >
-                <MaterialCommunityIcons
-                  name="motion-play-outline"
-                  size={18}
-                  color="black"
-                />
-                <Text
-                  style={[
-                    styles.menuText,
-                    {
-                      borderBottomColor:
-                        value.currentMedia == "video" ? "#000" : "#fff",
-                      borderBottomWidth: value.currentMedia == "video" ? 1 : 0,
-                    },
-                  ]}
-                >
-                  Vídeos
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => value.logout()}
-                style={styles.menuItem}
-              >
-                <MaterialCommunityIcons
-                  name="logout-variant"
-                  size={18}
-                  color="black"
-                />
-                <Text style={styles.menuText}>Sair</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
+          <Menu value={value} show={show} setShow={setShow} />
           <VtCard />
         </View>
-        <SenhasComponent Senhas={Senhas} />
-
-        <TextInput
-          ref={inputRef}
-          style={styles.input}
-          placeholder="Digite o número da senha"
-          showSoftInputOnFocus={false}
-          value={formInput}
-          onChangeText={setFormInput}
-          clearTextOnFocus={true}
-          onBlur={() => {
-            focusInput();
-          }}
+        <SenhasComponent
+          Senhas={Senhas}
+          isMuted={isMuted}
+          handleIsMuted={handleIsMuted}
+        />
+        <SenhaInput
+          inputRef={inputRef}
+          formInput={formInput}
+          setFormInput={setFormInput}
         />
       </View>
       {isOpened && <OverlayNew newBalcao={newBalcao} />}

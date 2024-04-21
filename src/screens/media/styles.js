@@ -208,7 +208,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    width: "100%",
+    width: "1%",
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
@@ -370,5 +370,24 @@ export default StyleSheet.create({
     justifyContent: "center",
     position: "absolute",
     top: 6,
+  },
+  muteButton: {
+    position: "absolute",
+    top: 10,
+    left: 15,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 50,
+    zIndex: 9999999999999,
+    opacity: 0.8,
+  },
+  senhaMuteButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    padding: 10,
+    borderRadius: 50,
+    zIndex: 9999999999999,
+    opacity: 0.8,
   },
 });
