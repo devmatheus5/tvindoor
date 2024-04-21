@@ -21,11 +21,11 @@ export const Senhas = [
 ];
 
 export const videoUrls = [
-  "https://dev.rutherles.pt/videos/vi1.mp4",
-  "https://dev.rutherles.pt/videos/vi2.mp4",
-  "https://dev.rutherles.pt/videos/vi3.mp4",
-  "https://dev.rutherles.pt/videos/vi4.mp4",
-  "https://dev.rutherles.pt/videos/vi5.mp4",
-  "https://dev.rutherles.pt/videos/vi6.mp4",
-  "https://dev.rutherles.pt/videos/vi7.mp4",
+  "https://dev.rutherles.pt/videos/admin1.mp4",
+  "https://dev.rutherles.pt/videos/admin2.mp4",
+  "https://dev.rutherles.pt/videos/admin3.mp4",
+  "https://dev.rutherles.pt/videos/admin4.mp4",
+  "https://dev.rutherles.pt/videos/admin5.mp4",
+  "https://dev.rutherles.pt/videos/admin6.mp4",
+  "https://dev.rutherles.pt/videos/admin7.mp4",
 ];

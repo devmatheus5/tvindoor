@@ -1,13 +1,21 @@
 import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import * as FileSystem from "expo-file-system";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [currentMedia, setCurrentMedia] = useState("news");
-
+  const videoDirectory = FileSystem.documentDirectory + "videos";
+  const baseUrl = "https://dev.rutherles.pt/";
+  const createVideoDirectory = async () => {
+    const dir = await FileSystem.getInfoAsync(videoDirectory);
+    if (!dir.exists) {
+      await FileSystem.makeDirectoryAsync(videoDirectory);
+    }
+  };
   const Login = async (user, password, intervalGap, city) => {
     const data = {
       usuario: user,
@@ -21,6 +29,7 @@ const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem("@user", JSON.stringify(data));
       setUser(data);
       setLoggedIn(true);
+
       return true;
     } catch (error) {
       Alert.alert("Erro", "Erro ao realizar login");
@@ -41,6 +50,7 @@ const AuthProvider = ({ children }) => {
 
     setUser(JSON.parse(user));
     setLoggedIn(true);
+    createVideoDirectory();
   };
 
   useEffect(() => {
@@ -54,6 +64,8 @@ const AuthProvider = ({ children }) => {
     setUser,
     currentMedia,
     setCurrentMedia,
+    videoDirectory,
+    baseUrl,
   };
 
   return (

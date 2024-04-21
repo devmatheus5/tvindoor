@@ -35,7 +35,9 @@ const VideoCard = () => {
         posterSource={require("../../../../assets/thumb.png")}
         ref={video}
         style={styles.playerVideo}
-        source={{ uri: videoUrls[currentVideoIndex] }}
+        source={{
+          uri: "file:///data/user/0/host.exp.exponent/files/videos/admin2.mp4",
+        }}
         useNativeControls={true}
         onError={(error) => {
           console.error("Error:", error);
