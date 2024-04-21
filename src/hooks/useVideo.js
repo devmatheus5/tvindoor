@@ -1,14 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "./auth";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 
 const useVideo = () => {
   const { value } = useContext(AuthContext);
   const [videoUrls, setVideoUrls] = useState([]);
+
   const downloadVideos = async (fileUri) => {
     return;
+
     fileUri.map((item) => {
       FileSystem.downloadAsync(
         item,
@@ -23,15 +24,8 @@ const useVideo = () => {
     });
   };
 
-  useEffect(() => {
-    FileSystem.readDirectoryAsync(value.videoDirectory)
-      .then((res) => {})
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
   const getVideos = async () => {
+    const videos = await FileSystem.readDirectoryAsync(value.videoDirectory);
     await axios
       .get(`${value.baseUrl}videos/${value.user.usuario}.json`)
       .then((res) => {
@@ -39,13 +33,21 @@ const useVideo = () => {
           let parts = item.split("videos/");
           return parts[1];
         });
-        setVideoUrls(url);
-      });
+        const fileUri = url
+          .filter((item) => !videos.includes(item))
+          .map((item) => `${value.baseUrl}${item}`);
 
-    const fileUri = videoUrls.map((item) => {
-      return `${value.baseUrl}videos/${item}`;
-    });
-    downloadVideos(fileUri);
+        console.log(fileUri);
+        downloadVideos(fileUri);
+
+        const videoUri = url.map((item) => {
+          return `${value.videoDirectory}/${item}`;
+        });
+        setVideoUrls(videoUri);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   useEffect(() => {
