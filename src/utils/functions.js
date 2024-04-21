@@ -26,8 +26,9 @@ export const playNextVideo = async (
   if (currentVideoIndex < videoUrls.length - 1) {
     setCurrentVideoIndex(currentVideoIndex + 1);
   } else {
-    setCurrentVideoIndex(0);
     handleChangeMedia();
+
+    setCurrentVideoIndex(0);
   }
 
   await video.current?.loadAsync(

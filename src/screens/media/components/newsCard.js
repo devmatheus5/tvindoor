@@ -10,23 +10,19 @@ import useInfo from "../../../hooks/useInfo";
 import styles from "../styles";
 import { AuthContext } from "../../../hooks/auth";
 const NewsCard = () => {
-  const currentNewsIndexRef = useRef(currentNewsIndex);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
   const { value } = useContext(AuthContext);
   const { news } = useInfo();
 
-  useEffect(() => {
-    currentNewsIndexRef.current = currentNewsIndex;
-  }, [currentNewsIndex]);
-
   const handleNews = useCallback(() => {
+    console.log(news);
     if (currentNewsIndex == news.length - 1) {
       setCurrentNewsIndex(0);
       value.setCurrentMedia("video");
     } else {
       setCurrentNewsIndex(currentNewsIndex + 1);
     }
-  }, []);
+  }, [currentNewsIndex]);
 
   useEffect(() => {
     const interval = setInterval(handleNews, 15000);

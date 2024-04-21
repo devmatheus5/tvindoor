@@ -7,6 +7,7 @@ const useInfo = () => {
   const [dollar, setDollar] = useState(0);
   const [weather, setWeather] = useState("");
   const [news, setNews] = useState([]);
+  const [dataIsFetched, setDataFetched] = useState(false);
 
   const getDollar = async () => {
     if (dollar !== 0) {
@@ -45,18 +46,18 @@ const useInfo = () => {
   };
 
   const getNews = async () => {
-    if (value?.user?.hnews == "true") {
+    if (dataIsFetched) {
       return;
     }
-    try {
-      if (news.length < 2) {
-        const response = await fetch(
-          `https://newsdata.io/api/1/news?apikey=pub_422368401d2c07156ed21e62e5c6761f9a638&country=br&language=pt&size=3`
-        );
 
-        const data = await response.json();
-        setNews(data.results);
-      }
+    try {
+      const response = await fetch(
+        `https://newsdata.io/api/1/news?apikey=pub_422368401d2c07156ed21e62e5c6761f9a638&country=br&language=pt&size=3`
+      );
+
+      const data = await response.json();
+      setNews(data.results);
+      setDataFetched(true);
     } catch (error) {
       console.error(error);
     }

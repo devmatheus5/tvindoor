@@ -39,6 +39,7 @@ const SenhasComponent = ({ Senhas }) => {
                 styles.senha,
                 {
                   backgroundColor: handleType(item.type),
+                  display: isNaN(item?.value) ? "none" : "flex",
                 },
               ]}
             >

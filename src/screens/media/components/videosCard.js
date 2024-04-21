@@ -11,9 +11,7 @@ const VideoCard = () => {
   const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   function handleChangeMedia() {
-    if (value?.user?.hnews == true) {
-      value.setCurrentMedia("news");
-    }
+    value.setCurrentMedia("news");
   }
 
   function handleNextVideo() {

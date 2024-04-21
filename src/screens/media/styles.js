@@ -308,7 +308,7 @@ export default StyleSheet.create({
   },
   balcaonewtext: {
     color: "#ffffff",
-    fontSize: 150,
+    fontSize: 250,
     fontWeight: "700",
   },
   balcaonewlabel: {

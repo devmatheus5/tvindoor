@@ -48,9 +48,6 @@ function MediaScreen() {
   const handleNewBalcao = () => {
     if (formInput == "") {
       return;
-    } else if (isNaN(formInput)) {
-      setFormInput("");
-      return;
     }
 
     const data = {
@@ -59,7 +56,10 @@ function MediaScreen() {
       data: new Date().toISOString(),
       status: "pendente",
     };
-
+    if (isNaN(data.value) || data.value < 0) {
+      inputRef.current.clear();
+      return;
+    }
     Senhas.unshift(data);
     setFormInput("");
 
@@ -98,9 +98,9 @@ function MediaScreen() {
     <View style={styles.container}>
       <View style={styles.inner}>
         <View style={styles.video}>
-          {value.currentMedia == "news" && <NewsCard />}
+          {value?.currentMedia == "news" && <NewsCard />}
 
-          {value.currentMedia == "video" && <VideosCard />}
+          {value?.currentMedia == "video" && <VideosCard />}
           <TouchableOpacity onPress={() => setShow(!show)} style={styles.logo}>
             <Image
               style={styles.logoImg}
