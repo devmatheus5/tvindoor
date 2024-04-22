@@ -131,6 +131,7 @@ export default StyleSheet.create({
 
     zIndex: 999,
   },
+
   logoImg: {
     width: 70,
     height: 46,
@@ -315,6 +316,9 @@ export default StyleSheet.create({
     color: "#ffffff",
     fontSize: 50,
     fontWeight: "700",
+    position: "absolute",
+    top: 10,
+    zIndex: 9999999999,
   },
   lastSenha: {
     width: "100%",
@@ -389,5 +393,41 @@ export default StyleSheet.create({
     borderRadius: 50,
     zIndex: 9999999999999,
     opacity: 0.8,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    backgroundColor: "#000",
+    width: "100%",
+    height: "100%",
+    zIndex: 9999999999,
+  },
+  loadingText: {
+    color: "#fff",
+    fontSize: 20,
+    marginRight: 10,
+  },
+  loadingBar: {
+    width: 400,
+    height: 6,
+    borderRadius: 10,
+    backgroundColor: "white",
+    marginTop: 20,
+  },
+  loadingLogo: {
+    width: 150,
+    height: 150,
+    resizeMode: "contain",
+  },
+  refresh: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    marginLeft: 10,
+  },
+  refreshText: {
+    color: "#000",
   },
 });

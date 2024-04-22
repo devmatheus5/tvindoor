@@ -37,7 +37,6 @@ export default function OverlayNew({ newBalcao }) {
   return (
     <>
       <View style={styles.overlay} />
-      <Text style={styles.balcaonewlabel}>SENHA</Text>
 
       <Animated.View
         style={[
@@ -48,6 +47,8 @@ export default function OverlayNew({ newBalcao }) {
           },
         ]}
       >
+        <Text style={styles.balcaonewlabel}>SENHA</Text>
+
         <Text numberOfLines={1} style={styles.balcaonewtext}>
           {newBalcao?.value || "00"}
         </Text>

@@ -1,17 +1,9 @@
-import {
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  useTVEventHandler,
-} from "react-native";
+import { View, useTVEventHandler } from "react-native";
 import styles from "./styles";
 import React, { useContext, useEffect, useState } from "react";
 import SenhasComponent from "./components/senhas";
 import NewsCard from "./components/newsCard";
 import VideosCard from "./components/videosCard";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import VtCard from "./components/vt";
 import OverlayNew from "./components/overlayNew";
 import { Senhas } from "../../services/values";
@@ -20,6 +12,7 @@ import { focusInput, handleEnter, playSound } from "../../utils/functions";
 import Menu from "./components/menu";
 import SenhaInput from "./components/SenhaInput";
 import useVideo from "../../hooks/useVideo";
+import LoadingOverlay from "./components/loading";
 function MediaScreen() {
   const inputRef = React.useRef(null);
   const [show, setShow] = React.useState(false);
@@ -29,7 +22,7 @@ function MediaScreen() {
   const { value } = useContext(AuthContext);
   const [sound, setSound] = useState();
   const [isMuted, setIsMuted] = useState(false);
-  const { videoUrls } = useVideo();
+  const { isError, isLoading } = useVideo();
   useEffect(() => {
     if (!sound) return;
 
@@ -44,7 +37,12 @@ function MediaScreen() {
     }
 
     const data = {
-      value: parseInt(formInput),
+      value:
+        formInput == "+" && newBalcao?.value
+          ? newBalcao?.value + 1
+          : formInput == "-" && newBalcao?.value
+          ? newBalcao?.value - 1
+          : parseInt(formInput),
       type: "balcao",
       data: new Date().toISOString(),
       status: "pendente",
@@ -55,7 +53,6 @@ function MediaScreen() {
     }
     Senhas.unshift(data);
     setFormInput("");
-
     setNewBalcao(data);
     setIsOpened(true);
     if (!isMuted) {
@@ -82,7 +79,6 @@ function MediaScreen() {
   const handleIsMuted = async () => {
     setIsMuted(!isMuted);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
@@ -104,6 +100,7 @@ function MediaScreen() {
         />
       </View>
       {isOpened && <OverlayNew newBalcao={newBalcao} />}
+      {isLoading && <LoadingOverlay isError={isError} />}
     </View>
   );
 }

@@ -1,14 +1,15 @@
 import { ResizeMode, Video } from "expo-av";
 import React, { useContext, useRef, useState } from "react";
 import { Image, View } from "react-native";
-import { videoUrls } from "../../../services/values";
 import { playNextVideo } from "../../../utils/functions";
 import styles from "../styles";
 import { TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../hooks/auth";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useVideo from "../../../hooks/useVideo";
 const VideoCard = () => {
   const video = useRef(null);
+  const { videoUrls } = useVideo();
   const [isMuted, setIsMuted] = useState(true);
   const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -36,11 +37,11 @@ const VideoCard = () => {
         ref={video}
         style={styles.playerVideo}
         source={{
-          uri: "file:///data/user/0/host.exp.exponent/files/videos/admin2.mp4",
+          uri: videoUrls[currentVideoIndex],
         }}
         useNativeControls={true}
         onError={(error) => {
-          console.error("Error:", error);
+          console.error("ErrorVideo:", videoUrls[currentVideoIndex], error);
           handleNextVideo();
         }}
         resizeMode={ResizeMode.COVER}

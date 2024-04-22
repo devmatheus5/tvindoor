@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AuthProvider } from "./src/hooks/auth";
 import Routes from "./src/routes";
 import * as Updates from "expo-updates";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 
 function useAppUpdates(setIsReady) {
   useEffect(() => {
@@ -27,7 +27,7 @@ function useAppUpdates(setIsReady) {
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  
+
   useAppUpdates(setIsReady);
 
   useEffect(() => {
