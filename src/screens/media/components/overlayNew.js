@@ -4,12 +4,12 @@ import styles from "../styles";
 
 export default function OverlayNew({ newBalcao }) {
   const opacityAnimation = useRef(new Animated.Value(0.6)).current;
-  const scaleAnimation = useRef(new Animated.Value(1)).current;
+  const scaleAnimation = useRef(new Animated.Value(0.8)).current;
 
   useEffect(() => {
     const sequence = Animated.sequence([
       Animated.timing(scaleAnimation, {
-        toValue: 1.2,
+        toValue: 1,
         duration: 500,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
@@ -22,7 +22,7 @@ export default function OverlayNew({ newBalcao }) {
       }),
       // ...
       Animated.timing(scaleAnimation, {
-        toValue: 1,
+        toValue: 0.8,
         duration: 500,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
@@ -49,9 +49,7 @@ export default function OverlayNew({ newBalcao }) {
       >
         <Text style={styles.balcaonewlabel}>SENHA</Text>
 
-        <Text numberOfLines={1} style={styles.balcaonewtext}>
-          {newBalcao?.value || "00"}
-        </Text>
+        <Text style={styles.balcaonewtext}>{newBalcao?.value || "00"}</Text>
       </Animated.View>
     </>
   );

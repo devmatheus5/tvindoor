@@ -299,7 +299,8 @@ export default StyleSheet.create({
   balcaonew: {
     width: "100%",
     height: "75%",
-    top: "5%",
+    top: "12.5%",
+    bottom: "12.5%",
     backgroundColor: "#000",
     position: "absolute",
     zIndex: 9999999999,
@@ -316,9 +317,6 @@ export default StyleSheet.create({
     color: "#ffffff",
     fontSize: 50,
     fontWeight: "700",
-    position: "absolute",
-    top: 10,
-    zIndex: 9999999999,
   },
   lastSenha: {
     width: "100%",

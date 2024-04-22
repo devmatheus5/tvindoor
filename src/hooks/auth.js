@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [currentMedia, setCurrentMedia] = useState("news");
+  const [isMuted, setIsMuted] = useState(false);
   const videoDirectory = FileSystem.documentDirectory + "videos";
   const baseUrl = "https://dev.rutherles.pt/";
   const createVideoDirectory = async () => {
@@ -15,6 +16,10 @@ const AuthProvider = ({ children }) => {
     if (!dir.exists) {
       await FileSystem.makeDirectoryAsync(videoDirectory);
     }
+  };
+  const handleIsMuted = async () => {
+    await AsyncStorage.setItem("@isMuted", JSON.stringify(!isMuted));
+    setIsMuted(!isMuted);
   };
   const Login = async (user, password, intervalGap, city) => {
     const data = {
@@ -47,6 +52,10 @@ const AuthProvider = ({ children }) => {
     if (!user) {
       return;
     }
+    const muted = await AsyncStorage.getItem("@isMuted");
+    if (muted) {
+      setIsMuted(JSON.parse(muted));
+    }
 
     setUser(JSON.parse(user));
     setLoggedIn(true);
@@ -66,6 +75,8 @@ const AuthProvider = ({ children }) => {
     setCurrentMedia,
     videoDirectory,
     baseUrl,
+    isMuted,
+    handleIsMuted,
   };
 
   return (

@@ -10,7 +10,6 @@ import useVideo from "../../../hooks/useVideo";
 const VideoCard = () => {
   const video = useRef(null);
   const { videoUrls } = useVideo();
-  const [isMuted, setIsMuted] = useState(true);
   const { value } = useContext(AuthContext);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   function handleChangeMedia() {
@@ -24,7 +23,7 @@ const VideoCard = () => {
       setCurrentVideoIndex,
       video,
       handleChangeMedia,
-      isMuted
+      value.isMuted
     );
   }
   return (
@@ -46,11 +45,11 @@ const VideoCard = () => {
         }}
         resizeMode={ResizeMode.COVER}
         isLooping={false}
-        isMuted={isMuted}
+        isMuted={value.isMuted}
         shouldPlay={true}
         onReadyForDisplay={() => {
           video.current.playAsync();
-          video.current.setIsMutedAsync(isMuted);
+          video.current.setIsMutedAsync(value.isMuted);
         }}
         onPlaybackStatusUpdate={(status) => {
           if (status.didJustFinish) {
@@ -61,12 +60,12 @@ const VideoCard = () => {
       <TouchableOpacity
         style={styles.muteButton}
         onPress={() => {
-          video.current.setIsMutedAsync(!isMuted);
-          setIsMuted(!isMuted);
+          video.current.setIsMutedAsync(!value.isMuted);
+          value.handleIsMuted();
         }}
       >
         <MaterialCommunityIcons
-          name={isMuted ? "volume-off" : "volume-high"}
+          name={value.isMuted ? "volume-off" : "volume-high"}
           size={24}
           color="black"
         />

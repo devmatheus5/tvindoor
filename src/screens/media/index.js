@@ -21,7 +21,6 @@ function MediaScreen() {
   const [isOpened, setIsOpened] = React.useState(false);
   const { value } = useContext(AuthContext);
   const [sound, setSound] = useState();
-  const [isMuted, setIsMuted] = useState(false);
   const { isError, isLoading } = useVideo();
   useEffect(() => {
     if (!sound) return;
@@ -55,7 +54,7 @@ function MediaScreen() {
     setFormInput("");
     setNewBalcao(data);
     setIsOpened(true);
-    if (!isMuted) {
+    if (!value.isMuted) {
       playSound(setSound);
     }
     const closeAfterTimeout = () => setIsOpened(false);
@@ -77,7 +76,7 @@ function MediaScreen() {
   };
   useTVEventHandler(myEventHandler);
   const handleIsMuted = async () => {
-    setIsMuted(!isMuted);
+    value.handleIsMuted();
   };
   return (
     <View style={styles.container}>
@@ -90,7 +89,7 @@ function MediaScreen() {
         </View>
         <SenhasComponent
           Senhas={Senhas}
-          isMuted={isMuted}
+          isMuted={value.isMuted}
           handleIsMuted={handleIsMuted}
         />
         <SenhaInput
@@ -100,7 +99,7 @@ function MediaScreen() {
         />
       </View>
       {isOpened && <OverlayNew newBalcao={newBalcao} />}
-      {isLoading && <LoadingOverlay isError={isError} />}
+      {isLoading && <LoadingOverlay />}
     </View>
   );
 }

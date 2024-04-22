@@ -19,13 +19,3 @@ export const Senhas = [
     status: "pendente",
   },
 ];
-
-export const videoUrls = [
-  "https://dev.rutherles.pt/videos/admin1.mp4",
-  "https://dev.rutherles.pt/videos/admin2.mp4",
-  "https://dev.rutherles.pt/videos/admin3.mp4",
-  "https://dev.rutherles.pt/videos/admin4.mp4",
-  "https://dev.rutherles.pt/videos/admin5.mp4",
-  "https://dev.rutherles.pt/videos/admin6.mp4",
-  "https://dev.rutherles.pt/videos/admin7.mp4",
-];
