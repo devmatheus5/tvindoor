@@ -13,7 +13,7 @@ export default function Menu({ value, show, setShow }) {
       </TouchableOpacity>
       {show && (
         <View style={styles.menu}>
-          {value?.user?.hnews == true && (
+          {value?.user?.news == 1 && (
             <TouchableOpacity
               onPress={() => {
                 value.setCurrentMedia("news");

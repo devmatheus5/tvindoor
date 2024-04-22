@@ -13,6 +13,7 @@ import Menu from "./components/menu";
 import SenhaInput from "./components/SenhaInput";
 import useVideo from "../../hooks/useVideo";
 import LoadingOverlay from "./components/loading";
+import useSenhas from "../../hooks/useSenha";
 function MediaScreen() {
   const inputRef = React.useRef(null);
   const [show, setShow] = React.useState(false);
@@ -21,7 +22,9 @@ function MediaScreen() {
   const [isOpened, setIsOpened] = React.useState(false);
   const { value } = useContext(AuthContext);
   const [sound, setSound] = useState();
-  const { isError, isLoading } = useVideo();
+  const { isLoading } = useVideo();
+  const { senhas, postSenha } = useSenhas();
+
   useEffect(() => {
     if (!sound) return;
 
@@ -30,7 +33,7 @@ function MediaScreen() {
     };
   }, [sound]);
 
-  const handleNewBalcao = () => {
+  const handleNewBalcao = async () => {
     if (formInput == "") {
       return;
     }
@@ -45,20 +48,26 @@ function MediaScreen() {
       type: "balcao",
       data: new Date().toISOString(),
       status: "pendente",
+      user_id: "1",
     };
     if (isNaN(data.value) || data.value < 0) {
       inputRef.current.clear();
       return;
     }
-    Senhas.unshift(data);
-    setFormInput("");
-    setNewBalcao(data);
-    setIsOpened(true);
-    if (!value.isMuted) {
-      playSound(setSound);
+    try {
+      const res = await postSenha(JSON.stringify(data));
+
+      setFormInput("");
+      setNewBalcao(res.data);
+      setIsOpened(true);
+      if (!value.isMuted) {
+        playSound(setSound);
+      }
+      const closeAfterTimeout = () => setIsOpened(false);
+      setTimeout(closeAfterTimeout, 5000);
+    } catch (e) {
+      console.error("postSenha", e);
     }
-    const closeAfterTimeout = () => setIsOpened(false);
-    setTimeout(closeAfterTimeout, 5000);
   };
 
   useEffect(() => {
@@ -88,7 +97,7 @@ function MediaScreen() {
           <VtCard />
         </View>
         <SenhasComponent
-          Senhas={Senhas}
+          Senhas={senhas}
           isMuted={value.isMuted}
           handleIsMuted={handleIsMuted}
         />

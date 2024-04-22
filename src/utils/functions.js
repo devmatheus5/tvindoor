@@ -113,3 +113,10 @@ export const handleEnter = (ref, handleNewBalcao) => {
     handleNewBalcao();
   }
 };
+
+export const getDiff = (date) => {
+  const now = new Date();
+  const diff = (now - new Date(date)) / 60000; // converte para minutos
+  const hours = Math.floor(diff / 60);
+  return hours;
+};

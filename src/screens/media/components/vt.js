@@ -6,7 +6,6 @@ import useInfo from "../../../hooks/useInfo";
 
 const VtCard = () => {
   const { dollar, weather } = useInfo();
-
   return (
     <View style={styles.videoInfo}>
       <View style={styles.weater}>

@@ -29,10 +29,10 @@ function LoginScreen({ navigation }) {
   const [error, setError] = useState({ user: "", password: "" });
 
   const validateInputs = () => {
-    if (!user || user !== "admin") {
+    if (!user || user.length < 5) {
       return "Preencha um usuário válido";
     }
-    if (!password || password.length < 5 || password !== "admin") {
+    if (!password || password.length < 5) {
       return password.length < 5
         ? "Senha deve ter 5 dígitos"
         : "Preencha uma senha válida";
@@ -52,15 +52,17 @@ function LoginScreen({ navigation }) {
     }
 
     try {
-      const city = "petrolina";
-      const result = await value.Login(user, password, intervalGap, city);
+      const result = await value.Login(
+        user.trim(),
+        password.trim(),
+        intervalGap
+      );
       if (result) {
         navigation.navigate("Media");
-      } else {
-        Alert.alert("Erro", "Usuário ou senha inválidos");
       }
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+      Alert.alert("Erro", "Erro ao fazer login");
     } finally {
       setLoading(false);
     }
